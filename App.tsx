@@ -13,31 +13,57 @@ export default function App() {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Verificação de retorno de pagamento (Fluxo Real)
+  // -----------------------------
+  // 🔥 1. Verifica o retorno do Mercado Pago
+  // -----------------------------
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const paidParam = urlParams.get('paid');
-    
-    // Se o Mercado Pago redirecionar de volta com ?paid=true
-    if (paidParam === 'true') {
+
+    const status = urlParams.get('status');                // MP envia isso
+    const collectionStatus = urlParams.get('collection_status'); // Também envia
+    const merchantOrder = urlParams.get('merchant_order_id');     // Útil para debug
+
+    const isApproved =
+      status === 'approved' || collectionStatus === 'approved';
+
+    const isPending =
+      status === 'pending' || collectionStatus === 'pending';
+
+    // 🔥 Se aprovado → gerar logo final automaticamente
+    if (isApproved) {
       const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (savedData) {
         const parsedData = JSON.parse(savedData);
         setFormData(parsedData);
-        // Inicia a geração final automaticamente
         generateFinalVersion(parsedData);
-        // Limpa a URL para ficar bonita (remove o ?paid=true)
+
         window.history.replaceState({}, document.title, window.location.pathname);
       }
+      return;
+    }
+
+    // 🔥 Se pendente (PIX na maioria das vezes) → mostrar tela aguardando
+    if (isPending) {
+      setStep(AppStep.GENERATING_FINAL);
+
+      // Reload automático a cada 5s até o pagamento cair
+      const interval = setInterval(() => {
+        window.location.reload();
+      }, 5000);
+
+      return () => clearInterval(interval);
     }
   }, []);
 
+  // -----------------------------
+  // Geração da prévia
+  // -----------------------------
   const handleFormSubmit = async (data: LogoFormData) => {
     setError(null);
     setFormData(data);
     setStep(AppStep.GENERATING_PREVIEW);
-    
-    // Salva no localStorage para recuperar quando voltar do Mercado Pago
+
+    // Salva no localStorage para recuperar após pagamento
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
 
     try {
@@ -51,24 +77,29 @@ export default function App() {
     }
   };
 
+  // -----------------------------
+  // Geração final (sem marca d'água)
+  // -----------------------------
   const generateFinalVersion = async (data: LogoFormData) => {
     setStep(AppStep.GENERATING_FINAL);
     try {
-      // Gera a versão final (pode ser highQuality=true se implementado upscaling, ou apenas regeneração limpa)
       const imageBase64 = await generateLogoImage(data, true);
       setGeneratedImage(imageBase64);
       setStep(AppStep.SUCCESS);
     } catch (err) {
       setError("Erro ao gerar versão final. Atualize a página.");
-      setStep(AppStep.PREVIEW); 
+      setStep(AppStep.PREVIEW);
     }
   };
 
+  // -----------------------------
+  // Renderização das telas
+  // -----------------------------
   const renderContent = () => {
     switch (step) {
       case AppStep.FORM:
         return <InputForm onSubmit={handleFormSubmit} isLoading={false} />;
-      
+
       case AppStep.GENERATING_PREVIEW:
         return (
           <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -80,31 +111,24 @@ export default function App() {
 
       case AppStep.PREVIEW:
         return generatedImage ? (
-          <LogoPreview 
-            imageSrc={generatedImage} 
-            isPaid={false} 
-            onPaymentClick={() => {}} // Ação agora é direta no botão (href)
-          />
+          <LogoPreview imageSrc={generatedImage} isPaid={false} onPaymentClick={() => {}} />
         ) : null;
 
       case AppStep.GENERATING_FINAL:
         return (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <Loader2 className="w-16 h-16 text-green-600 animate-spin mb-6" />
-            <h2 className="text-2xl font-semibold text-gray-800">Pagamento Confirmado!</h2>
-            <p className="text-gray-500 mt-2">Gerando arquivo de alta definição (PNG) sem marca d'água.</p>
+            <h2 className="text-2xl font-semibold text-gray-800">Aguardando Confirmação do PIX...</h2>
+            <p className="text-gray-500 mt-2">Seu pagamento está sendo confirmado. Isso pode levar alguns segundos.</p>
+            <p className="text-gray-400 text-sm mt-4">A página será atualizada automaticamente.</p>
           </div>
         );
 
       case AppStep.SUCCESS:
-         return generatedImage ? (
-          <LogoPreview 
-            imageSrc={generatedImage} 
-            isPaid={true} 
-            onPaymentClick={() => {}} 
-          />
+        return generatedImage ? (
+          <LogoPreview imageSrc={generatedImage} isPaid={true} onPaymentClick={() => {}} />
         ) : null;
-        
+
       default:
         return null;
     }
@@ -116,11 +140,11 @@ export default function App() {
       <header className="bg-white border-b border-gray-200 py-4">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-md">C</div>
-             <span className="text-xl font-bold text-gray-900 tracking-tight">Criador de Logomarca</span>
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-md">C</div>
+            <span className="text-xl font-bold text-gray-900 tracking-tight">Criador de Logomarca</span>
           </div>
           {step !== AppStep.FORM && step !== AppStep.SUCCESS && (
-            <button 
+            <button
               onClick={() => window.location.href = '/'}
               className="text-sm text-gray-500 hover:text-gray-900 font-medium"
             >
@@ -130,7 +154,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* Main */}
       <main className="flex-grow container mx-auto px-4 py-12 flex items-center justify-center">
         <div className="w-full">
           {error && (
@@ -139,12 +163,11 @@ export default function App() {
               {error}
             </div>
           )}
-          
+
           {renderContent()}
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="bg-white border-t border-gray-200 py-8 mt-auto">
         <div className="container mx-auto px-4 text-center text-gray-400 text-sm">
           <p>&copy; {new Date().getFullYear()} Criador de Logomarca. Todos os direitos reservados.</p>
