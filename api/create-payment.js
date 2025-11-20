@@ -42,21 +42,19 @@ export default async function handler(req, res) {
     const data = await responseMP.json();
 
     if (!data.init_point) {
-      return res.status(500).json({ error: "Resposta inválida do Mercado Pago", data });
+      return res.status(500).json({
+        error: "Resposta inválida do Mercado Pago",
+        data,
+      });
     }
 
-    return res.status(200).json({ init_point: data.init_point });
+    return res.status(200).json({
+      init_point: data.init_point,
+      preference_id: data.id ?? null,
+    });
 
   } catch (err) {
     console.error("Erro no backend:", err);
     return res.status(500).json({ error: "Erro interno no servidor" });
   }
 }
-
-return res.status(200).json({
-  init_point: preference.init_point,
-  payment_id: preference.id
-});
-
-
-
