@@ -6,11 +6,21 @@ interface PaymentBrickProps {
 }
 
 export const PaymentBrick: React.FC<PaymentBrickProps> = () => {
-  const handlePayment = () => {
-    // Redirecionamento real para o Mercado Pago
-    // O retorno deve ser configurado no Mercado Pago para voltar com ?paid=true
-    window.location.href = 'https://mpago.la/2EjmnSm';
-  };
+  const handlePayment = async () => {
+  const res = await fetch("/api/create-preference", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: "Logomarca Profissional",
+      price: 19.9
+    })
+  });
+
+  const data = await res.json();
+
+  // Redireciona para checkout oficial
+  window.location.href = data.init_point;
+};
 
   return (
     <div className="w-full max-w-md mx-auto mt-6">
