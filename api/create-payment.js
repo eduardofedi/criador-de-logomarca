@@ -15,7 +15,7 @@ export default async function handler(req, res) {
         {
           title: "Licença de uso comercial - Logo PNG",
           quantity: 1,
-          unit_price: 9.9,
+          unit_price: 5.97,
           currency_id: "BRL",
         },
       ],
