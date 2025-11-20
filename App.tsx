@@ -13,15 +13,14 @@ export default function App() {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // -----------------------------
-  // 🔥 1. Verifica o retorno do Mercado Pago
-  // -----------------------------
+  // ----------------------------------------
+  // 🔥 Trata retorno do Mercado Pago
+  // ----------------------------------------
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
 
-    const status = urlParams.get('status');                // MP envia isso
-    const collectionStatus = urlParams.get('collection_status'); // Também envia
-    const merchantOrder = urlParams.get('merchant_order_id');     // Útil para debug
+    const status = urlParams.get('status');  
+    const collectionStatus = urlParams.get('collection_status');
 
     const isApproved =
       status === 'approved' || collectionStatus === 'approved';
@@ -29,24 +28,24 @@ export default function App() {
     const isPending =
       status === 'pending' || collectionStatus === 'pending';
 
-    // 🔥 Se aprovado → gerar logo final automaticamente
+    // 🔥 Pagamento aprovado → gerar logo final automaticamente
     if (isApproved) {
-      const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (savedData) {
-        const parsedData = JSON.parse(savedData);
-        setFormData(parsedData);
-        generateFinalVersion(parsedData);
+      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setFormData(parsed);
+        generateFinalVersion(parsed);
 
+        // Limpa os parâmetros da URL
         window.history.replaceState({}, document.title, window.location.pathname);
       }
       return;
     }
 
-    // 🔥 Se pendente (PIX na maioria das vezes) → mostrar tela aguardando
+    // 🔥 PIX pendente → mostrar tela de espera + auto reload
     if (isPending) {
       setStep(AppStep.GENERATING_FINAL);
 
-      // Reload automático a cada 5s até o pagamento cair
       const interval = setInterval(() => {
         window.location.reload();
       }, 5000);
@@ -55,15 +54,14 @@ export default function App() {
     }
   }, []);
 
-  // -----------------------------
+  // ----------------------------------------
   // Geração da prévia
-  // -----------------------------
+  // ----------------------------------------
   const handleFormSubmit = async (data: LogoFormData) => {
     setError(null);
     setFormData(data);
     setStep(AppStep.GENERATING_PREVIEW);
 
-    // Salva no localStorage para recuperar após pagamento
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
 
     try {
@@ -71,20 +69,20 @@ export default function App() {
       setGeneratedImage(imageBase64);
       setStep(AppStep.PREVIEW);
     } catch (err) {
-      console.error(err);
       setError("Erro ao gerar a logo. Por favor, tente novamente.");
       setStep(AppStep.FORM);
     }
   };
 
-  // -----------------------------
-  // Geração final (sem marca d'água)
-  // -----------------------------
+  // ----------------------------------------
+  // Geração da versão final
+  // ----------------------------------------
   const generateFinalVersion = async (data: LogoFormData) => {
     setStep(AppStep.GENERATING_FINAL);
+
     try {
-      const imageBase64 = await generateLogoImage(data, true);
-      setGeneratedImage(imageBase64);
+      const finalImg = await generateLogoImage(data, true);
+      setGeneratedImage(finalImg);
       setStep(AppStep.SUCCESS);
     } catch (err) {
       setError("Erro ao gerar versão final. Atualize a página.");
@@ -92,9 +90,9 @@ export default function App() {
     }
   };
 
-  // -----------------------------
-  // Renderização das telas
-  // -----------------------------
+  // ----------------------------------------
+  // Renderização
+  // ----------------------------------------
   const renderContent = () => {
     switch (step) {
       case AppStep.FORM:
@@ -136,17 +134,19 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Navbar */}
+
+      {/* HEADER */}
       <header className="bg-white border-b border-gray-200 py-4">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-md">C</div>
-            <span className="text-xl font-bold text-gray-900 tracking-tight">Criador de Logomarca</span>
+            <span className="text-xl font-bold text-gray-900">Criador de Logomarca</span>
           </div>
+
           {step !== AppStep.FORM && step !== AppStep.SUCCESS && (
             <button
               onClick={() => window.location.href = '/'}
-              className="text-sm text-gray-500 hover:text-gray-900 font-medium"
+              className="text-sm text-gray-500 hover:text-gray-900"
             >
               Começar de novo
             </button>
@@ -154,7 +154,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main */}
+      {/* MAIN */}
       <main className="flex-grow container mx-auto px-4 py-12 flex items-center justify-center">
         <div className="w-full">
           {error && (
@@ -163,14 +163,14 @@ export default function App() {
               {error}
             </div>
           )}
-
           {renderContent()}
         </div>
       </main>
 
-      <footer className="bg-white border-t border-gray-200 py-8 mt-auto">
+      {/* FOOTER */}
+      <footer className="bg-white border-t border-gray-200 py-8">
         <div className="container mx-auto px-4 text-center text-gray-400 text-sm">
-          <p>&copy; {new Date().getFullYear()} Criador de Logomarca. Todos os direitos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} Criador de Logomarca.</p>
           <p className="mt-2">Pagamento processado de forma segura.</p>
         </div>
       </footer>
