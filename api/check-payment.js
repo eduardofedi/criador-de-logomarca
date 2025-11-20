@@ -29,3 +29,18 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "Erro ao consultar pagamento" });
   }
 }
+
+import { getPaymentStatus } from "./webhook";
+
+export default async function handler(req, res) {
+  const { id } = req.query;
+
+  if (!id) {
+    return res.status(400).json({ error: "ID não informado" });
+  }
+
+  const status = getPaymentStatus(id);
+
+  return res.status(200).json({ status: status || "pending" });
+}
+
