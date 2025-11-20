@@ -52,3 +52,11 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "Erro interno no servidor" });
   }
 }
+
+return res.status(200).json({
+  init_point: preference.init_point,
+  payment_id: preference.id
+});
+
+
+
