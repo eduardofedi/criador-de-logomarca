@@ -11,21 +11,23 @@ export async function generateLogoImage(data: LogoFormData): Promise<string> {
   });
 
   const prompt = `
-Crie 1 logotipo profissional, comercial e facilmente aplicável para a marca ${data.name}, representando de forma clara e direta o nicho ${data.niche}. O estilo deve seguir a lógica de grandes estúdios de identidade visual brasileiros — como Oz Design, Ana Couto, Tátil Design e FutureBrand São Paulo — priorizando simplicidade inteligente, composição equilibrada e forte apelo de mercado.
+Crie 1 logotipo profissional, comercial e facilmente aplicável para a marca "${data.name}", representando de forma clara e direta o nicho "${data.niche}". 
 
-O design deve ser funcional e versátil, adequado para empresas reais do Brasil: símbolo geométrico limpo, visual memorável, tipografia moderna, clara e de fácil leitura. Pode ser colorido, mas com paleta bem resolvida e harmoniosa. Evite experimentalismos, elementos caóticos, excesso de linhas, texturas ou abstrações confusas.
+O estilo deve respeitar exatamente a escolha do usuário: ${data.style || "não especificado"}.
+Use como referência a lógica dos grandes estúdios brasileiros de identidade visual — Oz Design, Ana Couto, Tátil Design e FutureBrand São Paulo — priorizando simplicidade inteligente, composição equilibrada e apelo de mercado.
 
-Estilo solicitado: ${data.style || "não especificado"}.
-Cores desejadas: ${data.colors || "não especificadas"}.
+O design deve ser funcional, versátil e adequado a marcas reais do Brasil: símbolo geométrico limpo, visual memorável e tipografia moderna, clara e de fácil leitura. Pode ser colorido, desde que a paleta seja harmoniosa e bem resolvida. Evite experimentalismos exagerados, poluição visual, excesso de linhas, texturas ou abstrações difíceis de interpretar.
+
+Cores desejadas pelo usuário: ${data.colors || "não especificadas"}.
 
 Regras essenciais:
-- Fundo sólido e limpo
-- Nada de mockups, vitrines ou simulações
-- Sem sombras exageradas, brilhos, reflexos ou efeitos 3D
-- Símbolo + tipografia da marca ${data.name}
-- Deve parecer um logo brasileiro autêntico, moderno e pronto para uso real em branding, embalagens, lojas, mídias sociais e impressos.
+• Fundo sólido e limpo  
+• Proibido mockups, vitrines ou simulações  
+• Sem sombras pesadas, brilhos, reflexos, 3D ou efeitos artificiais  
+• Deve sempre conter símbolo + tipografia da marca "${data.name}"  
+• O resultado deve parecer um logotipo brasileiro autêntico, moderno e pronto para uso real em branding, embalagens, fachadas, mídias sociais e impressos.
 `;
-
+  
   const result = await model.generateContent(prompt);
 
   const parts = result.response.candidates?.[0]?.content?.parts;
