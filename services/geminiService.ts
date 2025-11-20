@@ -11,26 +11,7 @@ const constructPrompt = (data: LogoFormData): string => {
   const colorText = data.colors ? `, usando as cores ${data.colors}` : '';
   
   // Base internal prompt structure as requested
-  return `Crie 1 logotipo profissional, simples e memorável para a marca ${data.name}. 
-O logo deve transmitir claramente o nicho: ${data.niche}${styleText}${colorText}.
-
-Siga princípios de mestres do design como Paul Rand, Chermayeff & Geismar & Haviv, 
-Saul Bass, Massimo Vignelli e Pentagram:
-
-- Logo minimalista e altamente legível.
-- Símbolo forte, geométrico e reconhecível instantaneamente.
-- Design atemporal, evitando estilos datados ou modismos.
-- Construção visual baseada em formas simples e consistentes.
-- Relacionar o símbolo ao nicho ${data.niche} de forma inteligente, não literal.
-- Tipografia limpa, sólida e equilibrada com o símbolo.
-- Deve funcionar perfeitamente em preto e branco, pequena escala e impressão.
-- Nada de mockups, efeitos 3D, brilhos, sombras exageradas ou texturas.
-- Fundo sólido e neutro.
-- Apenas símbolo + nome da marca (${data.name}).
-- Entregar aparência de um logo comercial pronto para uso real, direto e profissional.
-
-O resultado final deve parecer criado por um estúdio líder mundial de branding, 
-com foco em clareza, simplicidade e impacto.
+  return `Crie 1 logotipo profissional, simples e memorável para a marca ${data.name}, refletindo o nicho ${data.niche}${styleText}${colorText}, com símbolo geométrico forte e atemporal no estilo Paul Rand / CGH / Vignelli, tipografia limpa, sem mockups ou efeitos, fundo sólido, totalmente legível em pequena escala e parecendo uma marca comercial real e pronta para uso.
 `;
 };
 
