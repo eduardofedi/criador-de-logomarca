@@ -10,13 +10,26 @@ export async function generateLogoImage(data: LogoFormData): Promise<string> {
     model: "gemini-2.5-flash-image",
   });
 
-  const prompt = `
-Crie 1 logotipo simples, comercial, profissional e minimalista para a marca ${data.name}.
-Nicho: ${data.niche}.
-Estilo: ${data.style || "não especificado"}.
-Cores: ${data.colors || "não especificadas"}.
-Sem mockup. Fundo sólido. Símbolo + tipografia.
-`;
+  const prompt = `Crie 1 logotipo profissional, simples e memorável para a marca ${data.name}. 
+O logo deve transmitir claramente o nicho: ${data.niche}${styleText}${colorText}.
+
+Siga princípios de mestres do design como Paul Rand, Chermayeff & Geismar & Haviv, 
+Saul Bass, Massimo Vignelli e Pentagram:
+
+- Logo minimalista e altamente legível.
+- Símbolo forte, geométrico e reconhecível instantaneamente.
+- Design atemporal, evitando estilos datados ou modismos.
+- Construção visual baseada em formas simples e consistentes.
+- Relacionar o símbolo ao nicho ${data.niche} de forma inteligente, não literal.
+- Tipografia limpa, sólida e equilibrada com o símbolo.
+- Deve funcionar perfeitamente em preto e branco, pequena escala e impressão.
+- Nada de mockups, efeitos 3D, brilhos, sombras exageradas ou texturas.
+- Fundo sólido e neutro.
+- Apenas símbolo + nome da marca (${data.name}).
+- Entregar aparência de um logo comercial pronto para uso real, direto e profissional.
+
+O resultado final deve parecer criado por um estúdio líder mundial de branding, 
+com foco em clareza, simplicidade e impacto.`;
 
   const result = await model.generateContent(prompt);
 
