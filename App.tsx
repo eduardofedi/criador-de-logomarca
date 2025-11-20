@@ -98,7 +98,8 @@ export default function App() {
       const response = await fetch("/api/generate-logo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data }),
+        body: JSON.stringify({ data }),body: JSON.stringify({
+        prompt: `Crie a logo com os seguintes dados: ${JSON.stringify(data)}
       });
 
       if (!response.ok) {
