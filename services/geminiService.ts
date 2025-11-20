@@ -11,7 +11,27 @@ const constructPrompt = (data: LogoFormData): string => {
   const colorText = data.colors ? `, usando as cores ${data.colors}` : '';
   
   // Base internal prompt structure as requested
-  return `Gere 1 logo simples, nítido, profissional e minimalista para a marca ${data.name}, nicho ${data.niche}${styleText}${colorText}. Fundo sólido e limpo. Nada de mockups. O design deve ser simples, direto e comercial. Logo simples, minimalista, para uso geral, com fundo sólido, estilo profissional, sem mockups, sem sombras exageradas, apenas símbolo + texto da marca ${data.name} e sensação do nicho ${data.niche}. Deve parecer um logo comercial pronto para uso.`;
+  return `Crie 1 logotipo profissional, simples e memorável para a marca ${data.name}. 
+O logo deve transmitir claramente o nicho: ${data.niche}${styleText}${colorText}.
+
+Siga princípios de mestres do design como Paul Rand, Chermayeff & Geismar & Haviv, 
+Saul Bass, Massimo Vignelli e Pentagram:
+
+- Logo minimalista e altamente legível.
+- Símbolo forte, geométrico e reconhecível instantaneamente.
+- Design atemporal, evitando estilos datados ou modismos.
+- Construção visual baseada em formas simples e consistentes.
+- Relacionar o símbolo ao nicho ${data.niche} de forma inteligente, não literal.
+- Tipografia limpa, sólida e equilibrada com o símbolo.
+- Deve funcionar perfeitamente em preto e branco, pequena escala e impressão.
+- Nada de mockups, efeitos 3D, brilhos, sombras exageradas ou texturas.
+- Fundo sólido e neutro.
+- Apenas símbolo + nome da marca (${data.name}).
+- Entregar aparência de um logo comercial pronto para uso real, direto e profissional.
+
+O resultado final deve parecer criado por um estúdio líder mundial de branding, 
+com foco em clareza, simplicidade e impacto.
+`;
 };
 
 /**
