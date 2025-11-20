@@ -10,11 +10,15 @@ export async function generateLogoImage(data: LogoFormData): Promise<string> {
     model: "gemini-2.5-flash-image",
   });
 
-  const prompt = `Gere 1 logo simples, nítido, profissional e minimalista para a marca "${data.name}", nicho "${data.niche}"${styleText}${colorText}. 
-Fundo sólido e limpo. Nada de mockups.
-O design deve ser simples, direto e comercial.
-Logo simples e minimalista, para uso geral, com fundo sólido, estilo profissional, sem mockups, sem sombras exageradas, apenas símbolo + texto da marca "${data.name}" e sensação clara do nicho "${data.niche}".
-Deve parecer um logo comercial pronto para uso.`;
+  const prompt = `Gere 1 logo simples, nítido, profissional e minimalista para a marca "${data.name}", 
+no nicho "${data.niche}". 
+Estilo visual desejado: ${data.style || "não informado"}. 
+Cores desejadas: ${data.colors || "não informadas"}.
+
+Fundo sólido e limpo, sem mockups, sem sombras exageradas, sem efeitos.  
+O design deve ser comercial, direto e fácil de aplicar em qualquer contexto.  
+Use símbolo + texto da marca "${data.name}", transmitindo claramente o nicho "${data.niche}".  
+O resultado deve parecer um logo real pronto para uso.`;
   
   const result = await model.generateContent(prompt);
 
