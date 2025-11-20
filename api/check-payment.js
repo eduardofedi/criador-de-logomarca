@@ -9,26 +9,29 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "payment_id ausente" });
     }
 
-    // Configura client
     const client = new MercadoPagoConfig({
       accessToken: process.env.MP_ACCESS_TOKEN,
     });
 
-    // Consulta
+    // Consulta pagamento no SDK novo
     const result = await new Payment(client).get({ id });
 
+    const status = result.response?.status ?? "pending";
+    const detail = result.response?.status_detail ?? null;
+
     return res.status(200).json({
-      status: result.status ?? "pending",
-      detail: result.status_detail ?? null,
+      id,
+      status,
+      detail,
     });
 
   } catch (err) {
     console.error("CHECK-PAYMENT ERRO:", err);
 
-    // 🔥 IMPORTANTE: SEMPRE RETORNAR JSON
+    // 🔥 SEMPRE RETORNAR JSON, NUNCA HTML
     return res.status(200).json({
       status: "pending",
-      detail: "awaiting_confirmation"
+      detail: "awaiting_confirmation",
     });
   }
 }
