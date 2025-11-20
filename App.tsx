@@ -6,12 +6,13 @@ import { AppStep, LogoFormData } from "./types";
 import { Loader2, AlertCircle } from "lucide-react";
 
 const LOCAL_STORAGE_KEY = "logoSimplesData";
+const PREVIEW_IMAGE_KEY = "logo_preview_image";
+const FINAL_IMAGE_KEY = "logo_final_image";
 
 export default function App() {
   const [step, setStep] = useState<AppStep>(AppStep.FORM);
   const [formData, setFormData] = useState<LogoFormData | null>(null);
-  const [generatedImage, setGeneratedImage] =
-    useState<string | null>(null);
+  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // ------------------------------------------------------
@@ -30,59 +31,61 @@ export default function App() {
       status === "pending" || collectionStatus === "pending";
 
     // ------------------------------------------------------
-    // 🔥 PAGAMENTO APROVADO
+    // 🔥 PAGAMENTO APROVADO (SEM GERAR NOVA LOGO)
     // ------------------------------------------------------
     if (isApproved) {
-      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        setFormData(parsed);
-        generateFinalVersion(parsed);
+      const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const previewImg = localStorage.getItem(PREVIEW_IMAGE_KEY);
 
-        window.history.replaceState(
-          {},
-          document.title,
-          window.location.pathname
-        );
+      if (savedData && previewImg) {
+        const parsedData = JSON.parse(savedData);
+        setFormData(parsedData);
+
+        // usar MESMA imagem da prévia, sem gerar outra
+        setGeneratedImage(previewImg);
+
+        // marcar como final para download
+        localStorage.setItem(FINAL_IMAGE_KEY, previewImg);
+
+        setStep(AppStep.SUCCESS);
       }
+
+      window.history.replaceState({}, document.title, window.location.pathname);
       return;
     }
 
     // ------------------------------------------------------
-    // 🔥 PENDENTE → usar collection_id (payment_id real)
+    // 🔥 PAGAMENTO PENDENTE → verificar pagamento
     // ------------------------------------------------------
     if (isPending) {
       const paymentId =
-        urlParams.get("collection_id") || // payment_id REAL
-        urlParams.get("payment_id"); // fallback
+        urlParams.get("collection_id") ||
+        urlParams.get("payment_id");
 
       setStep(AppStep.GENERATING_FINAL);
 
       const interval = setInterval(async () => {
         if (!paymentId) return;
 
-        const res = await fetch(
-          `/api/check-payment?id=${paymentId}`
-        );
+        const res = await fetch(`/api/check-payment?id=${paymentId}`);
         const data = await res.json();
 
         if (data.status === "approved") {
           clearInterval(interval);
 
-          const savedData = localStorage.getItem(
-            LOCAL_STORAGE_KEY
-          );
+          const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+          const previewImg = localStorage.getItem(PREVIEW_IMAGE_KEY);
 
-          if (savedData) {
-            const parsedData = JSON.parse(savedData);
-            generateFinalVersion(parsedData);
+          if (saved && previewImg) {
+            setFormData(JSON.parse(saved));
+
+            // usa a prévia como imagem final
+            setGeneratedImage(previewImg);
+            localStorage.setItem(FINAL_IMAGE_KEY, previewImg);
+            setStep(AppStep.SUCCESS);
           }
 
-          window.history.replaceState(
-            {},
-            document.title,
-            window.location.pathname
-          );
+          window.history.replaceState({}, document.title, window.location.pathname);
         }
       }, 4000);
 
@@ -98,36 +101,19 @@ export default function App() {
     setFormData(data);
     setStep(AppStep.GENERATING_PREVIEW);
 
-    localStorage.setItem(
-      LOCAL_STORAGE_KEY,
-      JSON.stringify(data)
-    );
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
 
     try {
       const imageBase64 = await generateLogoImage(data, false);
       setGeneratedImage(imageBase64);
+
+      // salva a prévia original
+      localStorage.setItem(PREVIEW_IMAGE_KEY, imageBase64);
+
       setStep(AppStep.PREVIEW);
     } catch {
       setError("Erro ao gerar a logo. Por favor, tente novamente.");
       setStep(AppStep.FORM);
-    }
-  };
-
-  // ------------------------------------------------------
-  // Geração final sem marca d’água
-  // ------------------------------------------------------
-  const generateFinalVersion = async (data: LogoFormData) => {
-    setStep(AppStep.GENERATING_FINAL);
-
-    try {
-      const finalImg = await generateLogoImage(data, true);
-      setGeneratedImage(finalImg);
-      setStep(AppStep.SUCCESS);
-    } catch {
-      setError(
-        "Erro ao gerar versão final. Atualize a página."
-      );
-      setStep(AppStep.PREVIEW);
     }
   };
 
@@ -137,17 +123,13 @@ export default function App() {
   const renderContent = () => {
     switch (step) {
       case AppStep.FORM:
-        return (
-          <InputForm onSubmit={handleFormSubmit} isLoading={false} />
-        );
+        return <InputForm onSubmit={handleFormSubmit} isLoading={false} />;
 
       case AppStep.GENERATING_PREVIEW:
         return (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <Loader2 className="w-16 h-16 text-blue-600 animate-spin mb-6" />
-            <h2 className="text-2xl font-semibold text-gray-800">
-              Criando sua marca...
-            </h2>
+            <h2 className="text-2xl font-semibold text-gray-800">Criando sua marca...</h2>
             <p className="text-gray-500 mt-2">
               A IA está desenhando a melhor opção para o seu nicho.
             </p>
@@ -156,11 +138,7 @@ export default function App() {
 
       case AppStep.PREVIEW:
         return generatedImage ? (
-          <LogoPreview
-            imageSrc={generatedImage}
-            isPaid={false}
-            onPaymentClick={() => {}}
-          />
+          <LogoPreview imageSrc={generatedImage} isPaid={false} onPaymentClick={() => {}} />
         ) : null;
 
       case AppStep.GENERATING_FINAL:
@@ -171,8 +149,7 @@ export default function App() {
               Aguardando Confirmação do PIX...
             </h2>
             <p className="text-gray-500 mt-2">
-              Seu pagamento está sendo confirmado. Isso pode levar alguns
-              segundos.
+              Seu pagamento está sendo confirmado. Isso pode levar alguns segundos.
             </p>
             <p className="text-gray-400 text-sm mt-4">
               A página será atualizada automaticamente.
@@ -182,11 +159,7 @@ export default function App() {
 
       case AppStep.SUCCESS:
         return generatedImage ? (
-          <LogoPreview
-            imageSrc={generatedImage}
-            isPaid={true}
-            onPaymentClick={() => {}}
-          />
+          <LogoPreview imageSrc={generatedImage} isPaid={true} onPaymentClick={() => {}} />
         ) : null;
 
       default:
@@ -194,9 +167,6 @@ export default function App() {
     }
   };
 
-  // ------------------------------------------------------
-  // Estrutura da página
-  // ------------------------------------------------------
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white border-b border-gray-200 py-4">
@@ -205,22 +175,17 @@ export default function App() {
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-md">
               C
             </div>
-            <span className="text-xl font-bold text-gray-900">
-              Criador de Logomarca
-            </span>
+            <span className="text-xl font-bold text-gray-900">Criador de Logomarca</span>
           </div>
 
-          {step !== AppStep.FORM &&
-            step !== AppStep.SUCCESS && (
-              <button
-                onClick={() =>
-                  (window.location.href = "/")
-                }
-                className="text-sm text-gray-500 hover:text-gray-900"
-              >
-                Começar de novo
-              </button>
-            )}
+          {step !== AppStep.FORM && step !== AppStep.SUCCESS && (
+            <button
+              onClick={() => (window.location.href = "/")}
+              className="text-sm text-gray-500 hover:text-gray-900"
+            >
+              Começar de novo
+            </button>
+          )}
         </div>
       </header>
 
@@ -239,13 +204,8 @@ export default function App() {
 
       <footer className="bg-white border-t border-gray-200 py-8">
         <div className="container mx-auto px-4 text-center text-gray-400 text-sm">
-          <p>
-            &copy; {new Date().getFullYear()} Criador de
-            Logomarca.
-          </p>
-          <p className="mt-2">
-            Pagamento processado de forma segura.
-          </p>
+          <p>&copy; {new Date().getFullYear()} Criador de Logomarca.</p>
+          <p className="mt-2">Pagamento processado de forma segura.</p>
         </div>
       </footer>
     </div>
