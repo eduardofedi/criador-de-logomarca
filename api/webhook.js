@@ -1,11 +1,12 @@
 // /api/webhook.js
-import { MercadoPagoConfig, Payment } from "mercadopago";
+import { MercadoPagoConfig, Payment, MerchantOrder } from "mercadopago";
 
 const client = new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN
 });
 
-const payments = {};
+// memória temporária
+const orders = {};
 
 export default async function handler(req, res) {
   try {
@@ -13,30 +14,36 @@ export default async function handler(req, res) {
       return res.status(405).json({ error: "Método não permitido" });
     }
 
-    const notification = req.body;
+    const body = req.body;
 
-    if (!notification?.type || notification.type !== "payment") {
-      return res.status(200).json({ message: "Ignorado" });
+    // Evento inválido
+    if (!body || !body.type || body.type !== "payment") {
+      return res.status(200).json({ ignored: true });
     }
 
-    const paymentId = notification.data.id;
-    console.log("📩 Webhook recebeu pagamento:", paymentId);
+    const paymentId = body.data.id;
 
-    const result = await new Payment(client).get({ id: paymentId });
+    // Consulta pagamento real
+    const payment = await new Payment(client).get({ id: paymentId });
 
-    const status = result.response?.status ?? "pending";
-    console.log("💳 Status confirmado:", status);
+    // Consulta order
+    const order = await new MerchantOrder(client).get({ id: payment.order.id });
 
-    payments[paymentId] = status;
+    const merchantOrderId = order.id;
+
+    // SALVA STATUS REAL
+    orders[merchantOrderId] = payment.status;
+
+    console.log("Pagamento atualizado:", merchantOrderId, payment.status);
 
     return res.status(200).json({ ok: true });
 
   } catch (err) {
-    console.error("Erro no webhook:", err);
-    return res.status(500).json({ error: "Erro no webhook" });
+    console.error("Webhook error:", err);
+    return res.status(200).json({ ok: false });
   }
 }
 
-export function getPaymentStatus(id) {
-  return payments[id] || null;
+export function getOrderStatus(id) {
+  return orders[id] || "pending";
 }
