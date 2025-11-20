@@ -3,6 +3,7 @@ import { InputForm } from "./components/InputForm";
 import { LogoPreview } from "./components/LogoPreview";
 import { AppStep, LogoFormData } from "./types";
 import { Loader2, AlertCircle } from "lucide-react";
+import { generateLogoImage } from "./services/geminiService";
 
 const LOCAL_STORAGE_KEY = "logoSimplesData";
 const PREVIEW_IMAGE_KEY = "logo_preview_image";
@@ -79,7 +80,7 @@ export default function App() {
   }, []);
 
   // ------------------------------------------------------
-  // 🔥 Geração da PRÉVIA via API (CORRIGIDO)
+  // 🔥 Geração da PRÉVIA usando service → geminiService
   // ------------------------------------------------------
   const handleFormSubmit = async (data: LogoFormData) => {
     setError(null);
@@ -89,27 +90,11 @@ export default function App() {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
 
     try {
-      const response = await fetch("/api/generate-logo", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt: `Gere uma logo simples, comercial e minimalista para a marca "${data.name}", no nicho "${data.niche}". Cores desejadas: ${data.colors || "não especificado"}. Estilo: ${data.style || "não especificado"}. A imagem deve ser clara, nítida e sem mockup.`
-        }),
-      });
+      const imageBase64 = await generateLogoImage(data);
 
-      if (!response.ok) {
-        throw new Error("Falha ao gerar");
-      }
+      setGeneratedImage(imageBase64);
 
-      const result = await response.json();
-
-      if (!result.image) {
-        throw new Error("Resposta inválida da API");
-      }
-
-      setGeneratedImage(result.image);
-
-      localStorage.setItem(PREVIEW_IMAGE_KEY, result.image);
+      localStorage.setItem(PREVIEW_IMAGE_KEY, imageBase64);
 
       setStep(AppStep.PREVIEW);
     } catch (err) {
