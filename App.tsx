@@ -13,60 +13,57 @@ export default function App() {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // ----------------------------------------
-  // 🔥 Trata retorno do Mercado Pago
-  // ----------------------------------------
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
+useEffect(() => {
+  const urlParams = new URLSearchParams(window.location.search);
 
-    const status = urlParams.get('status');  
-    const collectionStatus = urlParams.get('collection_status');
+  const status = urlParams.get('status');  
+  const collectionStatus = urlParams.get('collection_status');
 
-    const isApproved =
-      status === 'approved' || collectionStatus === 'approved';
+  const isApproved =
+    status === 'approved' || collectionStatus === 'approved';
 
-    const isPending =
-      status === 'pending' || collectionStatus === 'pending';
+  const isPending =
+    status === 'pending' || collectionStatus === 'pending';
 
-    // 🔥 Pagamento aprovado → gerar logo final automaticamente
-    if (isApproved) {
-      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        setFormData(parsed);
-        generateFinalVersion(parsed);
-
-        // Limpa os parâmetros da URL
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
-      return;
-    }
-
-    // 🔥 PIX pendente → mostrar tela de espera + auto reload
-    if (isPending) {
-  const paymentId = urlParams.get("payment_id");
-
-  setStep(AppStep.GENERATING_FINAL);
-
-  const interval = setInterval(async () => {
-    if (!paymentId) return;
-
-    const res = await fetch(`/api/check-payment?id=${paymentId}`);
-    const data = await res.json();
-
-    if (data.status === "approved") {
-      clearInterval(interval);
-
-      const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-      const parsedData = JSON.parse(savedData);
-      generateFinalVersion(parsedData);
+  if (isApproved) {
+    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      setFormData(parsed);
+      generateFinalVersion(parsed);
 
       window.history.replaceState({}, document.title, window.location.pathname);
     }
-  }, 4000);
+    return;
+  }
 
-  return () => clearInterval(interval);
-}
+  if (isPending) {
+    const paymentId = urlParams.get("payment_id");
+
+    setStep(AppStep.GENERATING_FINAL);
+
+    const interval = setInterval(async () => {
+      if (!paymentId) return;
+
+      const res = await fetch(`/api/check-payment?id=${paymentId}`);
+      const data = await res.json();
+
+      if (data.status === "approved") {
+        clearInterval(interval);
+
+        const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+        const parsedData = JSON.parse(savedData);
+        generateFinalVersion(parsedData);
+
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }
+
+}, []); // <-- AGORA O useEffect FECHA AQUI
+
 
   // ----------------------------------------
   // Geração da prévia
