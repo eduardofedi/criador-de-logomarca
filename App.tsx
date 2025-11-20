@@ -44,15 +44,29 @@ export default function App() {
 
     // 🔥 PIX pendente → mostrar tela de espera + auto reload
     if (isPending) {
-      setStep(AppStep.GENERATING_FINAL);
+  const paymentId = urlParams.get("payment_id");
 
-      const interval = setInterval(() => {
-        window.location.reload();
-      }, 5000);
+  setStep(AppStep.GENERATING_FINAL);
 
-      return () => clearInterval(interval);
+  const interval = setInterval(async () => {
+    if (!paymentId) return;
+
+    const res = await fetch(`/api/check-payment?id=${paymentId}`);
+    const data = await res.json();
+
+    if (data.status === "approved") {
+      clearInterval(interval);
+
+      const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const parsedData = JSON.parse(savedData);
+      generateFinalVersion(parsedData);
+
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
-  }, []);
+  }, 4000);
+
+  return () => clearInterval(interval);
+}
 
   // ----------------------------------------
   // Geração da prévia
