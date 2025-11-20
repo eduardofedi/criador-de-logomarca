@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { InputForm } from "./components/InputForm";
 import { LogoPreview } from "./components/LogoPreview";
-import { generateLogoImage } from "./services/geminiService";
 import { AppStep, LogoFormData } from "./types";
 import { Loader2, AlertCircle } from "lucide-react";
 
@@ -16,7 +15,7 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
 
   // ------------------------------------------------------
-  // 🔥 Fluxo de retorno do Mercado Pago
+  // 🔥 Fluxo do Mercado Pago
   // ------------------------------------------------------
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -24,29 +23,20 @@ export default function App() {
     const status = urlParams.get("status");
     const collectionStatus = urlParams.get("collection_status");
 
-    const isApproved =
-      status === "approved" || collectionStatus === "approved";
-
-    const isPending =
-      status === "pending" || collectionStatus === "pending";
+    const isApproved = status === "approved" || collectionStatus === "approved";
+    const isPending = status === "pending" || collectionStatus === "pending";
 
     // ------------------------------------------------------
-    // 🔥 PAGAMENTO APROVADO (SEM GERAR NOVA LOGO)
+    // 🔥 PAGAMENTO APROVADO: usar imagem da prévia
     // ------------------------------------------------------
     if (isApproved) {
-      const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
       const previewImg = localStorage.getItem(PREVIEW_IMAGE_KEY);
 
-      if (savedData && previewImg) {
-        const parsedData = JSON.parse(savedData);
-        setFormData(parsedData);
-
-        // usar MESMA imagem da prévia, sem gerar outra
+      if (saved && previewImg) {
+        setFormData(JSON.parse(saved));
         setGeneratedImage(previewImg);
-
-        // marcar como final para download
         localStorage.setItem(FINAL_IMAGE_KEY, previewImg);
-
         setStep(AppStep.SUCCESS);
       }
 
@@ -55,37 +45,38 @@ export default function App() {
     }
 
     // ------------------------------------------------------
-    // 🔥 PAGAMENTO PENDENTE → verificar pagamento
+    // 🔥 PENDENTE: verificar pagamento
     // ------------------------------------------------------
     if (isPending) {
       const paymentId =
-        urlParams.get("collection_id") ||
-        urlParams.get("payment_id");
+        urlParams.get("collection_id") || urlParams.get("payment_id");
 
       setStep(AppStep.GENERATING_FINAL);
 
       const interval = setInterval(async () => {
         if (!paymentId) return;
 
-        const res = await fetch(`/api/check-payment?id=${paymentId}`);
-        const data = await res.json();
+        try {
+          const res = await fetch(`/api/check-payment?id=${paymentId}`);
+          const data = await res.json();
 
-        if (data.status === "approved") {
-          clearInterval(interval);
+          if (data.status === "approved") {
+            clearInterval(interval);
 
-          const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-          const previewImg = localStorage.getItem(PREVIEW_IMAGE_KEY);
+            const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+            const previewImg = localStorage.getItem(PREVIEW_IMAGE_KEY);
 
-          if (saved && previewImg) {
-            setFormData(JSON.parse(saved));
+            if (saved && previewImg) {
+              setFormData(JSON.parse(saved));
+              setGeneratedImage(previewImg);
+              localStorage.setItem(FINAL_IMAGE_KEY, previewImg);
+              setStep(AppStep.SUCCESS);
+            }
 
-            // usa a prévia como imagem final
-            setGeneratedImage(previewImg);
-            localStorage.setItem(FINAL_IMAGE_KEY, previewImg);
-            setStep(AppStep.SUCCESS);
+            window.history.replaceState({}, document.title, window.location.pathname);
           }
-
-          window.history.replaceState({}, document.title, window.location.pathname);
+        } catch {
+          console.warn("Falha ao consultar pagamento.");
         }
       }, 4000);
 
@@ -94,7 +85,7 @@ export default function App() {
   }, []);
 
   // ------------------------------------------------------
-  // Geração da prévia
+  // 🔥 Geração da PRÉVIA via API
   // ------------------------------------------------------
   const handleFormSubmit = async (data: LogoFormData) => {
     setError(null);
@@ -104,21 +95,37 @@ export default function App() {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
 
     try {
-      const imageBase64 = await generateLogoImage(data, false);
-      setGeneratedImage(imageBase64);
+      const response = await fetch("/api/generate-logo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data }),
+      });
 
-      // salva a prévia original
-      localStorage.setItem(PREVIEW_IMAGE_KEY, imageBase64);
+      if (!response.ok) {
+        throw new Error("Falha ao gerar");
+      }
+
+      const result = await response.json();
+
+      if (!result.image) {
+        throw new Error("Resposta inválida");
+      }
+
+      setGeneratedImage(result.image);
+
+      // salvar como prévia
+      localStorage.setItem(PREVIEW_IMAGE_KEY, result.image);
 
       setStep(AppStep.PREVIEW);
-    } catch {
+    } catch (err) {
+      console.error("Erro ao gerar logo:", err);
       setError("Erro ao gerar a logo. Por favor, tente novamente.");
       setStep(AppStep.FORM);
     }
   };
 
   // ------------------------------------------------------
-  // Renderização de telas
+  // Renderização das telas
   // ------------------------------------------------------
   const renderContent = () => {
     switch (step) {
@@ -197,7 +204,6 @@ export default function App() {
               {error}
             </div>
           )}
-
           {renderContent()}
         </div>
       </main>
