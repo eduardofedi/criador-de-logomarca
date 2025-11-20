@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { LogoFormData } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const ai = new GoogleGenAI({ apiKey: "AIzaSyCaAC19IbNnR_EsNsAvce2HlxXyYVoKMMs" });
 
 /**
  * Generates the prompt string based on user input.
