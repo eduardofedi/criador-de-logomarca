@@ -10,23 +10,7 @@ export async function generateLogoImage(data: LogoFormData): Promise<string> {
     model: "gemini-2.5-flash-image",
   });
 
-  const prompt = `
-Crie 1 logotipo profissional, comercial e facilmente aplicável para a marca "${data.name}", representando de forma clara e direta o nicho "${data.niche}". 
-
-O estilo deve respeitar exatamente a escolha do usuário: ${data.style || "não especificado"}.
-Use como referência a lógica dos grandes estúdios brasileiros de identidade visual — Oz Design, Ana Couto, Tátil Design e FutureBrand São Paulo — priorizando simplicidade inteligente, composição equilibrada e apelo de mercado.
-
-O design deve ser funcional, versátil e adequado a marcas reais do Brasil: símbolo geométrico limpo, visual memorável e tipografia moderna, clara e de fácil leitura. Pode ser colorido, desde que a paleta seja harmoniosa e bem resolvida. Evite experimentalismos exagerados, poluição visual, excesso de linhas, texturas ou abstrações difíceis de interpretar.
-
-Cores desejadas pelo usuário: ${data.colors || "não especificadas"}.
-
-Regras essenciais:
-• Fundo sólido e limpo  
-• Proibido mockups, vitrines ou simulações  
-• Sem sombras pesadas, brilhos, reflexos, 3D ou efeitos artificiais  
-• Deve sempre conter símbolo + tipografia da marca "${data.name}"  
-• O resultado deve parecer um logotipo brasileiro autêntico, moderno e pronto para uso real em branding, embalagens, fachadas, mídias sociais e impressos.
-`;
+  const prompt = `Gere 1 logo simples, nítido, profissional e minimalista para a marca ${data.name}, nicho ${data.niche}${styleText}${colorText}. Fundo sólido e limpo. Nada de mockups. O design deve ser simples, direto e comercial. Logo simples, minimalista, para uso geral, com fundo sólido, estilo profissional, sem mockups, sem sombras exageradas, apenas símbolo + texto da marca ${data.name} e sensação do nicho ${data.niche}. Deve parecer um logo comercial pronto para uso.`;
   
   const result = await model.generateContent(prompt);
 
