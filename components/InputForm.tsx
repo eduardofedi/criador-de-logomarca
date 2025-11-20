@@ -25,7 +25,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
         <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
           Criador de <span className="text-blue-600">Logomarca</span>
         </h1>
-        <p className="text-gray-500 mt-2 text-sm">Design profissional em 10 segundos</p>
+        <p className="text-gray-500 mt-2 text-sm">Design profissional em menos de 30 segundos</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -36,7 +36,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Ex: TechNova"
+            placeholder="Ex: TechSmart"
             style={{ colorScheme: 'light' }}
             className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none appearance-none"
           />
@@ -49,7 +49,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
             required
             value={niche}
             onChange={(e) => setNiche(e.target.value)}
-            placeholder="Ex: Advocacia, Café, Start-up..."
+            placeholder="Ex: Advocacia, Tecnologia, Beleza..."
             style={{ colorScheme: 'light' }}
             className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none appearance-none"
           />
@@ -61,7 +61,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit, isLoading }) => 
             type="text"
             value={colors}
             onChange={(e) => setColors(e.target.value)}
-            placeholder="Ex: Azul marinho e Dourado"
+            placeholder="Ex: Azul escuro e Branco ..."
             style={{ colorScheme: 'light' }}
             className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none appearance-none"
           />
