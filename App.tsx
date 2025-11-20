@@ -26,9 +26,6 @@ export default function App() {
     const isApproved = status === "approved" || collectionStatus === "approved";
     const isPending = status === "pending" || collectionStatus === "pending";
 
-    // ------------------------------------------------------
-    // 🔥 PAGAMENTO APROVADO: usar imagem da prévia
-    // ------------------------------------------------------
     if (isApproved) {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
       const previewImg = localStorage.getItem(PREVIEW_IMAGE_KEY);
@@ -44,9 +41,6 @@ export default function App() {
       return;
     }
 
-    // ------------------------------------------------------
-    // 🔥 PENDENTE: verificar pagamento
-    // ------------------------------------------------------
     if (isPending) {
       const paymentId =
         urlParams.get("collection_id") || urlParams.get("payment_id");
@@ -85,7 +79,7 @@ export default function App() {
   }, []);
 
   // ------------------------------------------------------
-  // 🔥 Geração da PRÉVIA via API
+  // 🔥 Geração da PRÉVIA via API (CORRIGIDO)
   // ------------------------------------------------------
   const handleFormSubmit = async (data: LogoFormData) => {
     setError(null);
@@ -98,8 +92,9 @@ export default function App() {
       const response = await fetch("/api/generate-logo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data }),body: JSON.stringify({
-        prompt: `Crie a logo com os seguintes dados: ${JSON.stringify(data)}
+        body: JSON.stringify({
+          prompt: `Gere uma logo simples, comercial e minimalista para a marca "${data.name}", no nicho "${data.niche}". Cores desejadas: ${data.colors || "não especificado"}. Estilo: ${data.style || "não especificado"}. A imagem deve ser clara, nítida e sem mockup.`
+        }),
       });
 
       if (!response.ok) {
@@ -109,12 +104,11 @@ export default function App() {
       const result = await response.json();
 
       if (!result.image) {
-        throw new Error("Resposta inválida");
+        throw new Error("Resposta inválida da API");
       }
 
       setGeneratedImage(result.image);
 
-      // salvar como prévia
       localStorage.setItem(PREVIEW_IMAGE_KEY, result.image);
 
       setStep(AppStep.PREVIEW);
