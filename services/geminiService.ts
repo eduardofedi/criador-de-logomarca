@@ -1,35 +1,29 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { LogoFormData } from "../types";
 
-/**
- * Monta o prompt final para gerar o logo.
- */
-const constructPrompt = (data: LogoFormData): string => {
-  const styleText = data.style ? `, estilo ${data.style}` : '';
-  const colorText = data.colors ? `, usando as cores ${data.colors}` : '';
+const apiKey = import.meta.env.VITE_PUBLIC_GEMINI_KEY;
 
-  return `Crie 1 logotipo profissional, simples e memorável para a marca ${data.name}, refletindo o nicho ${data.niche}${styleText}${colorText}, com símbolo geométrico forte e atemporal no estilo Paul Rand, Chermayeff & Geismar, Massimo Vignelli e Pentagram. Utilize composição minimalista, tipografia limpa, sem mockups ou efeitos, fundo sólido, totalmente legível em pequena escala e com aparência de marca comercial real e pronta para uso.`;
-};
+const genAI = new GoogleGenerativeAI(apiKey);
 
-/**
- * Chama o backend protegido que gera a imagem com a Gemini.
- */
-export const generateLogoImage = async (
-  data: LogoFormData,
-  highQuality: boolean = false
-): Promise<string> => {
-  const prompt = constructPrompt(data);
-
-  const res = await fetch("/api/generate-logo", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt, highQuality }),
+export async function generateLogoImage(data: LogoFormData): Promise<string> {
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.5-flash-image",
   });
 
-  const json = await res.json();
+  const prompt = `
+Crie 1 logotipo simples, comercial, profissional e minimalista para a marca ${data.name}.
+Nicho: ${data.niche}.
+Estilo: ${data.style || "não especificado"}.
+Cores: ${data.colors || "não especificadas"}.
+Sem mockup. Fundo sólido. Símbolo + tipografia.
+`;
 
-  if (!json.image) {
-    throw new Error("Falha ao gerar a imagem.");
-  }
+  const result = await model.generateContent(prompt);
 
-  return json.image; // já é um base64 pronto
-};
+  const parts = result.response.candidates?.[0]?.content?.parts;
+  const img = parts?.find((p: any) => p.inlineData)?.inlineData?.data;
+
+  if (!img) throw new Error("Falha ao gerar a imagem");
+
+  return `data:image/png;base64,${img}`;
+}
