@@ -11,7 +11,19 @@ export async function generateLogoImage(data: LogoFormData): Promise<string> {
   });
 
   const prompt = `
-Crie 1 logotipo profissional e comercial para a marca ${data.name}, refletindo claramente o nicho ${data.niche}, no estilo moderno e funcional de estúdios clássicos como Rand, Vignelli e CGH. Use composição simples com símbolo geométrico marcante e tipografia limpa. Estilo: ${data.style || "não especificado"}. Cores: ${data.colors || "não especificadas"}. Fundo sólido, sem mockups, sem efeitos, sem sombras. O resultado deve parecer um logo real pronto para uso em branding.
+Crie 1 logotipo profissional, comercial e facilmente aplicável para a marca ${data.name}, representando de forma clara e direta o nicho ${data.niche}. O estilo deve seguir a lógica de grandes estúdios de identidade visual brasileiros — como Oz Design, Ana Couto, Tátil Design e FutureBrand São Paulo — priorizando simplicidade inteligente, composição equilibrada e forte apelo de mercado.
+
+O design deve ser funcional e versátil, adequado para empresas reais do Brasil: símbolo geométrico limpo, visual memorável, tipografia moderna, clara e de fácil leitura. Pode ser colorido, mas com paleta bem resolvida e harmoniosa. Evite experimentalismos, elementos caóticos, excesso de linhas, texturas ou abstrações confusas.
+
+Estilo solicitado: ${data.style || "não especificado"}.
+Cores desejadas: ${data.colors || "não especificadas"}.
+
+Regras essenciais:
+- Fundo sólido e limpo
+- Nada de mockups, vitrines ou simulações
+- Sem sombras exageradas, brilhos, reflexos ou efeitos 3D
+- Símbolo + tipografia da marca ${data.name}
+- Deve parecer um logo brasileiro autêntico, moderno e pronto para uso real em branding, embalagens, lojas, mídias sociais e impressos.
 `;
 
   const result = await model.generateContent(prompt);
