@@ -1,45 +1,54 @@
-import mercadopago from "mercadopago";
-
-mercadopago.configure({
-  access_token: process.env.MP_ACCESS_TOKEN,
-});
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Método não permitido" });
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const preference = await mercadopago.preferences.create({
+    const mpToken = process.env.MP_ACCESS_TOKEN;
+
+    if (!mpToken) {
+      return res.status(500).json({ error: "Mercado Pago token não configurado" });
+    }
+
+    const payload = {
       items: [
         {
-          title: "Download Logomarca em Alta",
+          title: "Licença de uso comercial - Logo PNG",
           quantity: 1,
-          currency_id: "BRL",
           unit_price: 9.9,
+          currency_id: "BRL",
         },
       ],
-
-      // 🔥 ESSA PARTE AQUI ESTAVA FALTANDO 🔥
       back_urls: {
         success: "https://www.criadordelogomarca.com.br/?paid=true",
         failure: "https://www.criadordelogomarca.com.br/?paid=false",
         pending: "https://www.criadordelogomarca.com.br/?paid=pending",
       },
-
       auto_return: "approved",
+    };
 
-      payment_methods: {
-        excluded_payment_types: [],
-        installments: 1,
-      },
-    });
+    const responseMP = await fetch(
+      "https://api.mercadopago.com/checkout/preferences",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${mpToken}`,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
 
-    return res.status(200).json({
-      init_point: preference.body.init_point,
-    });
-  } catch (error) {
-    console.error("ERRO MERCADO PAGO:", error);
-    return res.status(500).json({ error: "Erro no MP" });
+    const data = await responseMP.json();
+
+    if (!data.init_point) {
+      return res.status(500).json({ error: "Resposta inválida do Mercado Pago", data });
+    }
+
+    return res.status(200).json({ init_point: data.init_point });
+
+  } catch (err) {
+    console.error("Erro no backend:", err);
+    return res.status(500).json({ error: "Erro interno no servidor" });
   }
 }
