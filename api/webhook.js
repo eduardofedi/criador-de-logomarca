@@ -5,7 +5,6 @@ const client = new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN
 });
 
-// Memória temporária (funciona no Vercel)
 const payments = {};
 
 export default async function handler(req, res) {
@@ -16,23 +15,20 @@ export default async function handler(req, res) {
 
     const notification = req.body;
 
-    // Caso obrigatório do Mercado Pago
-    if (!notification || !notification.type || notification.type !== "payment") {
+    if (!notification?.type || notification.type !== "payment") {
       return res.status(200).json({ message: "Ignorado" });
     }
 
     const paymentId = notification.data.id;
     console.log("📩 Webhook recebeu pagamento:", paymentId);
 
-    // Confirma o status real consultando o Mercado Pago
-    const payment = await new Payment(client).get({ id: paymentId });
+    const result = await new Payment(client).get({ id: paymentId });
 
-    console.log("💳 Status confirmado:", payment.status);
+    const status = result.response?.status ?? "pending";
+    console.log("💳 Status confirmado:", status);
 
-    // Guarda na memória temporária
-    payments[paymentId] = payment.status;
+    payments[paymentId] = status;
 
-    // Retorna ok
     return res.status(200).json({ ok: true });
 
   } catch (err) {
@@ -41,7 +37,6 @@ export default async function handler(req, res) {
   }
 }
 
-// Exportar os pagamentos (para o frontend consultar)
 export function getPaymentStatus(id) {
   return payments[id] || null;
 }
