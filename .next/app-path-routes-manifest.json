@@ -1,0 +1,15 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/admin/page": "/admin",
+  "/api/admin/config/route": "/api/admin/config",
+  "/api/checkout/route": "/api/checkout",
+  "/api/generate/route": "/api/generate",
+  "/api/generation/[id]/route": "/api/generation/[id]",
+  "/api/webhook/mercadopago/route": "/api/webhook/mercadopago",
+  "/checkout/success/[id]/page": "/checkout/success/[id]",
+  "/create/page": "/create",
+  "/favicon.ico/route": "/favicon.ico",
+  "/page": "/",
+  "/preview/[id]/page": "/preview/[id]"
+}

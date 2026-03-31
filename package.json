@@ -3,22 +3,29 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@google/genai": "latest",
-    "@google/generative-ai": "latest",
-    "lucide-react": "latest",
+    "@ai-sdk/google": "^1.0.0",
+    "@prisma/client": "^5.10.2",
+    "ai": "^3.0.0",
+    "lucide-react": "^0.344.0",
+    "mercadopago": "^2.0.8",
+    "next": "15.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.2.1",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "typescript": "^5.0.0",
-    "vite": "^5.0.0"
+    "@types/node": "^20.11.24",
+    "@types/react": "^18.2.61",
+    "@types/react-dom": "^18.2.19",
+    "eslint": "8.57.0",
+    "eslint-config-next": "14.1.0",
+    "prisma": "^5.10.2",
+    "typescript": "^5.3.3"
   }
 }
