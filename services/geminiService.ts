@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { LogoFormData } from "../types";
 
-const apiKey = import.meta.env.VITE_PUBLIC_GEMINI_KEY;
+const apiKey = (process as any).env.CRIADORDELOGOMARCA;
 
 const genAI = new GoogleGenerativeAI(apiKey);
 
@@ -19,7 +19,7 @@ Fundo sólido e limpo, sem mockups, sem sombras exageradas, sem efeitos.
 O design deve ser comercial, direto e fácil de aplicar em qualquer contexto.  
 Use símbolo + texto da marca "${data.name}", transmitindo claramente o nicho "${data.niche}".  
 O resultado deve parecer um logo real pronto para uso.`;
-  
+
   const result = await model.generateContent(prompt);
 
   const parts = result.response.candidates?.[0]?.content?.parts;
