@@ -7,7 +7,7 @@ const genAI = new GoogleGenerativeAI(apiKey);
 
 export async function generateLogoImage(data: LogoFormData): Promise<string> {
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash-image",
+    model: "gemini-3.1-flash-image-preview",
   });
 
   const prompt = `Gere 1 logo simples, nítido, profissional e minimalista para a marca "${data.name}", 
