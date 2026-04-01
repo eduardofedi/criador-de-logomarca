@@ -22,10 +22,11 @@ function getDecryptedKey(): string {
 }
 
 async function tryGenerate(apiKey: string, modelName: string, prompt: string) {
-    // Tentamos v1 que é o mais estável para modelos 1.5
-    const endpoint = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${apiKey}`;
+    // Usamos v1beta pois foi a que funcionou para listar os modelos
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
     const payload = {
-        contents: [{ parts: [{ text: prompt }] }]
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.7, topK: 40, topP: 0.95, maxOutputTokens: 2048 }
     };
 
     const response = await fetch(endpoint, {
@@ -39,22 +40,17 @@ async function tryGenerate(apiKey: string, modelName: string, prompt: string) {
         throw new Error(`[${modelName}] ${result.error?.message || response.status}`);
     }
 
-    // Buscamos qualquer dado de imagem (inlineData) ou texto que possa conter a URL
     const candidates = result.candidates || [];
     const parts = candidates[0]?.content?.parts || [];
 
+    // Busca por dados de imagem
     const imgPart = parts.find((p: any) => p.inlineData);
     if (imgPart) {
         return `data:image/png;base64,${imgPart.inlineData.data}`;
     }
 
-    // Se o modelo retornou texto ao invés de imagem, vamos logar isso
-    if (parts[0]?.text) {
-        console.log(`Modelo ${modelName} retornou texto:`, parts[0].text.substring(0, 50));
-        // Se a IA retornou só texto, ela não gerou a imagem. 
-        // Talvez o modelo não suporte geração de imagem direta.
-    }
-
+    // Se o modelo é o Gemini 2.0 ou 1.5, ele pode retornar a imagem em um formato específico ou só texto.
+    // Se retornar só texto, não é a imagem.
     return null;
 }
 
@@ -66,12 +62,12 @@ export async function generateLogoImage(data: { name: string, niche: string, sty
 Fundo sólido branco, logo centralizado, símbolo + texto "${data.name}".
 Sem mockups, sem sombras exageradas, alta resolução.`;
 
-    // Aumentamos o leque de modelos e tentamos nomes alternativos
+    // Nomes de modelos EXATOS encontrados no seu listModels (Anexo 15)
     const models = [
+        "gemini-2.0-flash", // Está na sua lista e é o mais moderno
         "gemini-1.5-flash",
-        "gemini-1.5-flash-8b",
-        "gemini-1.0-pro",
-        "gemini-pro"
+        "gemini-2.5-flash", // Também está na sua lista!
+        "gemini-1.5-pro"
     ];
 
     let errors: string[] = [];
@@ -80,11 +76,13 @@ Sem mockups, sem sombras exageradas, alta resolução.`;
         try {
             const result = await tryGenerate(apiKey, modelName, prompt);
             if (result) return result;
-            errors.push(`${modelName}: Não retornou imagem.`);
+            errors.push(`${modelName}: Não gerou imagem.`);
         } catch (e: any) {
             errors.push(`${modelName}: ${e.message}`);
         }
     }
 
-    throw new Error("Falha geral: " + errors.join(" | "));
+    // FALLBACK CRÍTICO: Se nenhum gerou imagem, pode ser que o Gemini agora exija Imagen para imagens.
+    // Mas vindo do seu projeto Vite, o fluxo deveria ser este.
+    throw new Error("Falha na geração: " + errors.join(" | "));
 }
