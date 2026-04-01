@@ -22,10 +22,10 @@ function getDecryptedKey(): string {
 }
 
 async function tryGenerate(apiKey: string, modelName: string, prompt: string) {
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+    // Tentamos v1 que é o mais estável para modelos 1.5
+    const endpoint = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${apiKey}`;
     const payload = {
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.7, topK: 40, topP: 0.95, maxOutputTokens: 2048 }
+        contents: [{ parts: [{ text: prompt }] }]
     };
 
     const response = await fetch(endpoint, {
@@ -36,45 +36,55 @@ async function tryGenerate(apiKey: string, modelName: string, prompt: string) {
 
     const result = await response.json();
     if (!response.ok) {
-        throw new Error(result.error?.message || `Erro ${response.status} no modelo ${modelName}`);
+        throw new Error(`[${modelName}] ${result.error?.message || response.status}`);
     }
 
-    const imgPart = result.candidates?.[0]?.content?.parts?.find((p: any) => p.inlineData);
+    // Buscamos qualquer dado de imagem (inlineData) ou texto que possa conter a URL
+    const candidates = result.candidates || [];
+    const parts = candidates[0]?.content?.parts || [];
+
+    const imgPart = parts.find((p: any) => p.inlineData);
     if (imgPart) {
         return `data:image/png;base64,${imgPart.inlineData.data}`;
     }
 
-    // Se não gerou imagem mas gerou texto (o que é mais comum no 1.5 Flash 
-    // se ele não estiver com o modo multimodal de imagem ativado)
-    // No entanto, se o usuário disse que funcionava antes, ele deve estar usando um modelo que gera.
+    // Se o modelo retornou texto ao invés de imagem, vamos logar isso
+    if (parts[0]?.text) {
+        console.log(`Modelo ${modelName} retornou texto:`, parts[0].text.substring(0, 50));
+        // Se a IA retornou só texto, ela não gerou a imagem. 
+        // Talvez o modelo não suporte geração de imagem direta.
+    }
+
     return null;
 }
 
 export async function generateLogoImage(data: { name: string, niche: string, style?: string, colors?: string }): Promise<string> {
     const apiKey = getDecryptedKey();
+    if (!apiKey) throw new Error("Chave de API não encontrada no servidor.");
+
     const prompt = `Gere 1 logo profissional e minimalista para a marca "${data.name}", no nicho "${data.niche}". 
-Cores: ${data.colors || "não informadas"}. Estilo: ${data.style || "minimalista"}.
 Fundo sólido branco, logo centralizado, símbolo + texto "${data.name}".
 Sem mockups, sem sombras exageradas, alta resolução.`;
 
-    // Fallback de modelos para garantir que um funcione
-    const models = ["gemini-1.5-flash", "gemini-1.5-flash-latest", "gemini-2.0-flash-exp", "gemini-1.5-pro"];
-    let lastError = "";
+    // Aumentamos o leque de modelos e tentamos nomes alternativos
+    const models = [
+        "gemini-1.5-flash",
+        "gemini-1.5-flash-8b",
+        "gemini-1.0-pro",
+        "gemini-pro"
+    ];
+
+    let errors: string[] = [];
 
     for (const modelName of models) {
         try {
-            console.log(`Tentando gerar com modelo: ${modelName}`);
             const result = await tryGenerate(apiKey, modelName, prompt);
             if (result) return result;
-            lastError = `Modelo ${modelName} não retornou imagem direta (dados binários).`;
+            errors.push(`${modelName}: Não retornou imagem.`);
         } catch (e: any) {
-            console.error(`Erro no modelo ${modelName}:`, e.message);
-            lastError = e.message;
-            if (e.message.includes("API key was reported as leaked")) {
-                throw new Error("Sua chave de API foi bloqueada pelo Google. Por favor, gere uma NOVA chave no AI Studio.");
-            }
+            errors.push(`${modelName}: ${e.message}`);
         }
     }
 
-    throw new Error(lastError || "Todos os modelos falharam na geração da imagem.");
+    throw new Error("Falha geral: " + errors.join(" | "));
 }
