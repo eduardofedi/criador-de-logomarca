@@ -1,17 +1,26 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-    const key = process.env.CRIADORDELOGOMARCA || "";
-    const keyEncoded = process.env.CRIADORDELOGOMARCA_ENCODED || "";
-    const keyGemini = process.env.GEMINI_API_KEY_ENCODED || "";
+    const key = (process.env.CRIADORDELOGOMARCA || "").trim();
 
-    return NextResponse.json({
-        hasKey: key.length > 0,
-        keyPrefix: key ? key.substring(0, 7) : "N/A",
-        keyLength: key.length,
-        hasKeyEncoded: keyEncoded.length > 0,
-        keyEncodedPrefix: keyEncoded ? keyEncoded.substring(0, 7) : "N/A",
-        hasKeyGemini: keyGemini.length > 0,
-        envKeys: Object.keys(process.env).filter(k => k.includes("LOGO") || k.includes("GEMINI"))
-    });
+    if (!key) {
+        return NextResponse.json({ error: "Chave não encontrada no servidor" });
+    }
+
+    try {
+        // Tentamos listar os modelos para ver o que essa chave "enxerga"
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
+        const data = await response.json();
+
+        return NextResponse.json({
+            hasKey: true,
+            keyPrefix: key.substring(0, 7),
+            modelsResponse: data
+        });
+    } catch (error: any) {
+        return NextResponse.json({
+            hasKey: true,
+            error: error.message
+        });
+    }
 }
