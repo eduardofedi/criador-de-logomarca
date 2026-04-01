@@ -2,13 +2,9 @@
  * 🔒 Segurança: A chave é processada estritamente no lado do servidor.
  */
 function getDecryptedKey(): string {
-    // 1. Tentar ler a variável em texto puro direto do dashboard
     const rawKey = (process.env.CRIADORDELOGOMARCA || "").trim();
-    if (rawKey && rawKey.startsWith("AIza")) {
-        return rawKey;
-    }
+    if (rawKey && rawKey.startsWith("AIza")) return rawKey;
 
-    // 2. Tentar ler a variável codificada em Base64
     const obfuscatedKey = (process.env.CRIADORDELOGOMARCA_ENCODED || process.env.GEMINI_API_KEY_ENCODED || "").trim();
     if (obfuscatedKey) {
         try {
@@ -17,7 +13,6 @@ function getDecryptedKey(): string {
         } catch { }
     }
 
-    // 3. Fallback: Chave codificada fixa (Criptografada no código)
     const HARDCODED_BASE64 = "QUl6YVN5Q0RJSUk1X3oyODJaVGFvSGM0dFo5cDZQdWZMcmVGTVc4";
     try {
         return Buffer.from(HARDCODED_BASE64, 'base64').toString('utf-8').trim();
@@ -26,66 +21,60 @@ function getDecryptedKey(): string {
     }
 }
 
-export async function generateLogoImage(data: { name: string, niche: string, style?: string, colors?: string }): Promise<string> {
-    const apiKey = getDecryptedKey();
-
-    // Usamos o Fetch direto para ter controle total sobre o endpoint e evitar bugs de versão do SDK
-    // Tentamos v1beta que é o mais flexível
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-
+async function tryGenerate(apiKey: string, modelName: string, prompt: string) {
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
     const payload = {
-        contents: [{
-            parts: [{
-                text: `Gere 1 logo profissional e minimalista para a marca "${data.name}", no nicho "${data.niche}". 
-Cores: ${data.colors || "não informadas"}. Estilo: ${data.style || "minimalista"}.
-Fundo sólido branco, logo centralizado, símbolo + texto "${data.name}".
-Sem mockups, sem sombras exageradas, alta resolução.`
-            }]
-        }],
-        generationConfig: {
-            temperature: 0.7,
-            topK: 40,
-            topP: 0.95,
-            maxOutputTokens: 2048,
-        }
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.7, topK: 40, topP: 0.95, maxOutputTokens: 2048 }
     };
 
-    try {
-        const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
+    const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
 
-        const result = await response.json();
-
-        if (!response.ok) {
-            console.error("Erro detalhado da API Gemini:", JSON.stringify(result, null, 2));
-            throw new Error(result.error?.message || `Erro ${response.status} na API Gemini`);
-        }
-
-        // Verificamos se há imagem no retorno (inlineData)
-        const candidates = result.candidates || [];
-        const parts = candidates[0]?.content?.parts || [];
-
-        // No Gemini, imagens são retornadas como inlineData em modelos que suportam geração de imagem direta.
-        // Se o modelo for apenas texto (como o Flash 1.5 padrão costuma ser para texto-para-imagem em certas regiões),
-        // ele pode não gerar a imagem se não for o modelo específico Imagen.
-        // No código original, o modelo era usado para gerar a imagem.
-
-        const imgPart = parts.find((p: any) => p.inlineData);
-        if (imgPart) {
-            return `data:image/png;base64,${imgPart.inlineData.data}`;
-        }
-
-        // Se não retornou inlineData, pode ser que o modelo retornou apenas texto com o link ou algo assim
-        // Mas o objetivo original era geração direta.
-        throw new Error("A IA não retornou os dados da imagem. Verifique se o modelo está correto.");
-
-    } catch (error: any) {
-        console.error("Generate API Error:", error);
-        throw error;
+    const result = await response.json();
+    if (!response.ok) {
+        throw new Error(result.error?.message || `Erro ${response.status} no modelo ${modelName}`);
     }
+
+    const imgPart = result.candidates?.[0]?.content?.parts?.find((p: any) => p.inlineData);
+    if (imgPart) {
+        return `data:image/png;base64,${imgPart.inlineData.data}`;
+    }
+
+    // Se não gerou imagem mas gerou texto (o que é mais comum no 1.5 Flash 
+    // se ele não estiver com o modo multimodal de imagem ativado)
+    // No entanto, se o usuário disse que funcionava antes, ele deve estar usando um modelo que gera.
+    return null;
+}
+
+export async function generateLogoImage(data: { name: string, niche: string, style?: string, colors?: string }): Promise<string> {
+    const apiKey = getDecryptedKey();
+    const prompt = `Gere 1 logo profissional e minimalista para a marca "${data.name}", no nicho "${data.niche}". 
+Cores: ${data.colors || "não informadas"}. Estilo: ${data.style || "minimalista"}.
+Fundo sólido branco, logo centralizado, símbolo + texto "${data.name}".
+Sem mockups, sem sombras exageradas, alta resolução.`;
+
+    // Fallback de modelos para garantir que um funcione
+    const models = ["gemini-1.5-flash", "gemini-1.5-flash-latest", "gemini-2.0-flash-exp", "gemini-1.5-pro"];
+    let lastError = "";
+
+    for (const modelName of models) {
+        try {
+            console.log(`Tentando gerar com modelo: ${modelName}`);
+            const result = await tryGenerate(apiKey, modelName, prompt);
+            if (result) return result;
+            lastError = `Modelo ${modelName} não retornou imagem direta (dados binários).`;
+        } catch (e: any) {
+            console.error(`Erro no modelo ${modelName}:`, e.message);
+            lastError = e.message;
+            if (e.message.includes("API key was reported as leaked")) {
+                throw new Error("Sua chave de API foi bloqueada pelo Google. Por favor, gere uma NOVA chave no AI Studio.");
+            }
+        }
+    }
+
+    throw new Error(lastError || "Todos os modelos falharam na geração da imagem.");
 }
