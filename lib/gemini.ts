@@ -5,52 +5,47 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
  * No entanto, por estar no lado do servidor (Next.js), ela já está muito mais segura que no Vite.
  */
 function getDecryptedKey(): string {
-    // O usuário solicitou que a chave "CRIADORDELOGOMARCA" (VITE_GEMINI_PUBLIC_KEY antiga) ficasse no código.
-    // Substitua 'SUA_CHAVE_AQUI_EM_BASE64' pela sua chave Gemini em Base64.
-    // Exemplo: se sua chave for AIza..., use btoa('AIza...') no console e cole aqui.
-
-    const obfuscatedKey = process.env.CRIADORDELOGOMARCA_ENCODED || "";
-
-    if (!obfuscatedKey) {
-        // Fallback para desenvolvimento caso não queira usar env var nem no servidor
-        // Para produção, recomenda-se usar a env var no Vercel mesmo no servidor.
-        // Mas atendendo ao pedido, aqui está o local para a chave
-        // This is an obfuscated version of the Gemini API Key to prevent direct exposure
-        const ENCODED_FALLBACK = "QUl6YVN5Q0RJSUk1X3oyODJaVGFvSGM0dFo5cDZQdWZMcmVGRVc4";
-        // PLACEHOLDER
-        return Buffer.from(ENCODED_FALLBACK, 'base64').toString('utf-8');
+    // 1. Tentar ler a variável em texto puro direto do dashboard (como mostrado no print)
+    if (process.env.CRIADORDELOGOMARCA) {
+        return process.env.CRIADORDELOGOMARCA;
     }
 
-    return Buffer.from(obfuscatedKey, 'base64').toString('utf-8');
+    // 2. Tentar ler a variável codificada em Base64
+    const obfuscatedKey = process.env.CRIADORDELOGOMARCA_ENCODED || process.env.GEMINI_API_KEY_ENCODED;
+    if (obfuscatedKey) {
+        try {
+            return Buffer.from(obfuscatedKey, 'base64').toString('utf-8');
+        } catch {
+            return obfuscatedKey; // Caso a pessoa tenha colocado texto puro mas na variável _ENCODED
+        }
+    }
+
+    // 3. Fallback: Usar a chave codificada fixa conforme solicitado (Criptografada no código)
+    // Chave: AIzaSyCDIII5_z282ZTaoHc4tZ9p6PufLreFMW8
+    const HARDCODED_BASE64 = "QUl6YVN5Q0RJSUk1X3oyODJaVGFvSGM0dFo5cDZQdWZMcmVGTVc4";
+    return Buffer.from(HARDCODED_BASE64, 'base64').toString('utf-8');
 }
 
 const genAI = new GoogleGenerativeAI(getDecryptedKey());
 
 export async function generateLogoImage(data: { name: string, niche: string, style?: string, colors?: string }): Promise<string> {
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash", // Atualizado para a versão mais comum e estável
+        model: "gemini-2.0-flash",
     });
 
-    const prompt = `Gere 1 logo simples, nítido, profissional e minimalista para a marca "${data.name}", 
-no nicho "${data.niche}". 
-Estilo visual desejado: ${data.style || "não informado"}. 
-Cores desejadas: ${data.colors || "não informadas"}.
-
-Fundo sólido e limpo, sem mockups, sem sombras exageradas, sem efeitos.  
-O design deve ser comercial, direto e fácil de aplicar em qualquer contexto.  
-Use símbolo + texto da marca "${data.name}", transmitindo claramente o nicho "${data.niche}".  
-O resultado deve parecer um logo real pronto para uso.`;
+    // Prompt otimizado para gerar imagem (inlineData)
+    const prompt = `Gere 1 logo profissional e minimalista para a marca "${data.name}", no nicho "${data.niche}". 
+Cores: ${data.colors || "não informadas"}. Estilo: ${data.style || "minimalista"}.
+Fundo sólido branco, logo centralizado, símbolo + texto "${data.name}".
+Sem mockups, sem sombras exageradas, alta resolução.`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
 
-    // Note: Gemini API standard output for images is via certain parts, 
-    // but if it's returning text with image data, we handle it appropriately.
-    // Based on original code:
     const parts = response.candidates?.[0]?.content?.parts;
     const img = parts?.find((p: any) => p.inlineData)?.inlineData?.data;
 
-    if (!img) throw new Error("Falha ao gerar a imagem");
+    if (!img) throw new Error("Falha ao gerar a imagem no formato esperado");
 
     return `data:image/png;base64,${img}`;
 }
