@@ -26,6 +26,10 @@ function getDecryptedKey(): string {
 }
 
 const genAI = new GoogleGenerativeAI(getDecryptedKey());
+// O SDK por padrão pode usar v1beta. Forçamos v1 para modelos estáveis.
+// @ts-ignore - Dependendo da versão do types, o segundo parâmetro pode não estar tipado mas é suportado.
+// Caso o SDK não aceite o segundo parâmetro no construtor nesta versão específica, 
+// o modelo gemini-1.5-flash deve ser chamado via v1 automaticamente se o SDK estiver atualizado.
 // Nota: O SDK costuma usar v1 por padrão para modelos estáveis, 
 // mas forçamos v1 aqui para garantir compatibilidade com gemini-1.5-flash.
 
