@@ -29,7 +29,7 @@ const genAI = new GoogleGenerativeAI(getDecryptedKey());
 
 export async function generateLogoImage(data: { name: string, niche: string, style?: string, colors?: string }): Promise<string> {
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: "gemini-1.5-flash",
     });
 
     // Prompt otimizado para gerar imagem (inlineData)
