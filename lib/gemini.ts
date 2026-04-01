@@ -20,8 +20,7 @@ function getDecryptedKey(): string {
         }
     }
 
-    // 3. Fallback: Usar a chave codificada fixa conforme solicitado (Criptografada no código)
-    // Chave: AIzaSyCDIII5_z282ZTaoHc4tZ9p6PufLreFMW8
+    // Chave codificada fixa conforme solicitado (Criptografada no código)
     const HARDCODED_BASE64 = "QUl6YVN5Q0RJSUk1X3oyODJaVGFvSGM0dFo5cDZQdWZMcmVGTVc4";
     return Buffer.from(HARDCODED_BASE64, 'base64').toString('utf-8');
 }
