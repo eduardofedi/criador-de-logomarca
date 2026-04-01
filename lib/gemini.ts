@@ -36,6 +36,8 @@ const genAI = new GoogleGenerativeAI(getDecryptedKey());
 export async function generateLogoImage(data: { name: string, niche: string, style?: string, colors?: string }): Promise<string> {
     const model = genAI.getGenerativeModel({
         model: "gemini-1.5-flash",
+    }, {
+        apiVersion: "v1"
     });
 
     // Prompt otimizado para gerar imagem (inlineData)
