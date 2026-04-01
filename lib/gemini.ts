@@ -26,6 +26,8 @@ function getDecryptedKey(): string {
 }
 
 const genAI = new GoogleGenerativeAI(getDecryptedKey());
+// Nota: O SDK costuma usar v1 por padrão para modelos estáveis, 
+// mas forçamos v1 aqui para garantir compatibilidade com gemini-1.5-flash.
 
 export async function generateLogoImage(data: { name: string, niche: string, style?: string, colors?: string }): Promise<string> {
     const model = genAI.getGenerativeModel({
