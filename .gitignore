@@ -21,4 +21,10 @@ dist-ssr
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
+.sw?
+
+# Next.js
+.next/
+out/
+build/
+.env*.local
