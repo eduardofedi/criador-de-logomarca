@@ -14,9 +14,11 @@ function getDecryptedKey(): string {
     if (!obfuscatedKey) {
         // Fallback para desenvolvimento caso não queira usar env var nem no servidor
         // Para produção, recomenda-se usar a env var no Vercel mesmo no servidor.
-        // Mas atendendo ao pedido, aqui está o local para a chave "fixa" obfuscada:
-        const hardcodedObfuscated = "QUl6YVN5RHVlTGJfdktpT3VfX19fX19fX19fX19fX19fX19fXw=="; // PLACEHOLDER
-        return Buffer.from(hardcodedObfuscated, 'base64').toString('utf-8');
+        // Mas atendendo ao pedido, aqui está o local para a chave
+        // This is an obfuscated version of the Gemini API Key to prevent direct exposure
+        const ENCODED_FALLBACK = "QUl6YVN5Q0RJSUk1X3oyODJaVGFvSGM0dFo5cDZQdWZMcmVGRVc4";
+        // PLACEHOLDER
+        return Buffer.from(ENCODED_FALLBACK, 'base64').toString('utf-8');
     }
 
     return Buffer.from(obfuscatedKey, 'base64').toString('utf-8');
