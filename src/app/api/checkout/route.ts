@@ -10,8 +10,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'logoId, email e CPF/CNPJ são obrigatórios' }, { status: 400 });
     }
 
-    // Alterado para R$ 1,00 para testes conforme solicitado
-    const price = 1.00;
+    // Alterado para R$ 5,01 para testes conforme solicitado (limite minimo Asaas)
+    const price = 5.01;
 
     // 1. Create order in Supabase
     const { data: order, error: orderError } = await supabase

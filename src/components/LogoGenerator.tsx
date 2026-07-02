@@ -166,7 +166,7 @@ export default function LogoGenerator() {
     img.src = url;
   };
 
-  const finalPrice = '1,00';
+  const finalPrice = '5,01';
 
   return (
     <div className="w-full">
