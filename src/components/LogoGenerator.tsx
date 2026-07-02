@@ -119,7 +119,7 @@ export default function LogoGenerator() {
         
       if (data?.status === 'paid') {
         setIsPaid(true);
-        alert('Pagamento Confirmado! O logotipo já foi enviado para o seu e-mail e agora você pode baixá-lo sem marca d\\'água aqui mesmo.');
+        alert("Pagamento Confirmado! O logotipo já foi enviado para o seu e-mail e agora você pode baixá-lo sem marca d'água aqui mesmo.");
       } else {
         alert('O pagamento ainda não consta como confirmado. Se você acabou de pagar, aguarde alguns instantes e clique novamente.');
       }
