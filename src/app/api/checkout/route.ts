@@ -4,10 +4,10 @@ import { createCustomer, createPixPayment, getPixQrCode } from '@/lib/asaas';
 
 export async function POST(req: NextRequest) {
   try {
-    const { logoId, email } = await req.json();
+    const { logoId, email, cpfCnpj } = await req.json();
 
-    if (!logoId || !email) {
-      return NextResponse.json({ error: 'logoId and email are required' }, { status: 400 });
+    if (!logoId || !email || !cpfCnpj) {
+      return NextResponse.json({ error: 'logoId, email e CPF/CNPJ são obrigatórios' }, { status: 400 });
     }
 
     const price = 29.90;
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     if (orderError) throw orderError;
 
     // 2. Create customer in Asaas
-    const customer = await createCustomer(email);
+    const customer = await createCustomer(email, cpfCnpj);
 
     // 3. Create PIX payment in Asaas
     const payment = await createPixPayment(customer.id, price, order.id);

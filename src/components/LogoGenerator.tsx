@@ -27,6 +27,7 @@ export default function LogoGenerator() {
   
   // Checkout state
   const [email, setEmail] = useState('');
+  const [cpfCnpj, setCpfCnpj] = useState('');
   const [pixData, setPixData] = useState<{ encodedImage: string, payload: string, paymentId: string } | null>(null);
   const [isGeneratingPix, setIsGeneratingPix] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -68,6 +69,10 @@ export default function LogoGenerator() {
       alert('Por favor, informe um e-mail válido para receber o logotipo.');
       return;
     }
+    if (!cpfCnpj || cpfCnpj.length < 11) {
+      alert('Por favor, informe um CPF ou CNPJ válido.');
+      return;
+    }
     setIsGeneratingPix(true);
     try {
       const res = await fetch('/api/checkout', {
@@ -76,6 +81,7 @@ export default function LogoGenerator() {
         body: JSON.stringify({
           logoId: result?.id,
           email,
+          cpfCnpj: cpfCnpj.replace(/\D/g, '') // Send only digits
         }),
       });
       const data = await res.json();
@@ -198,10 +204,7 @@ export default function LogoGenerator() {
 
               {!pixData ? (
                 <div className="space-y-4 pt-4">
-                  <div className="space-y-2">
-                    <label className="block text-sm text-gray-700 font-bold">
-                      Para onde enviaremos o seu logotipo final?
-                    </label>
+                  <div className="space-y-4">
                     <div className="relative">
                       <Mail className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-400" />
                       <input 
@@ -213,11 +216,22 @@ export default function LogoGenerator() {
                         className="w-full bg-gray-50 border border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl py-3.5 pl-11 pr-4 text-gray-900 placeholder-gray-400 outline-none transition font-medium"
                       />
                     </div>
+                    <div className="relative">
+                      <ShieldCheck className="absolute left-3.5 top-3.5 w-5 h-5 text-gray-400" />
+                      <input 
+                        type="text"
+                        required
+                        value={cpfCnpj}
+                        onChange={(e) => setCpfCnpj(e.target.value)}
+                        placeholder="Seu CPF ou CNPJ"
+                        className="w-full bg-gray-50 border border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl py-3.5 pl-11 pr-4 text-gray-900 placeholder-gray-400 outline-none transition font-medium"
+                      />
+                    </div>
                   </div>
                   
                   <button 
                     onClick={handleGeneratePix}
-                    disabled={isGeneratingPix || !email}
+                    disabled={isGeneratingPix || !email || !cpfCnpj}
                     className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition text-base shadow-lg shadow-blue-600/20"
                   >
                     {isGeneratingPix ? (

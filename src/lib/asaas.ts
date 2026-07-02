@@ -1,7 +1,7 @@
 export const ASAAS_API_KEY = process.env.ASAAS_API_KEY!;
 export const ASAAS_BASE_URL = process.env.ASAAS_BASE_URL || 'https://api.asaas.com/v3';
 
-export async function createCustomer(email: string) {
+export async function createCustomer(email: string, cpfCnpj: string) {
   const res = await fetch(`${ASAAS_BASE_URL}/customers`, {
     method: 'POST',
     headers: {
@@ -11,6 +11,7 @@ export async function createCustomer(email: string) {
     body: JSON.stringify({
       name: 'Cliente Criador de Logomarca',
       email: email,
+      cpfCnpj: cpfCnpj,
     }),
   });
 
