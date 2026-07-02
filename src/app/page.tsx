@@ -50,25 +50,25 @@ export default async function Home() {
               Design Premium
             </div>
 
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.05] text-gray-900">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.05] text-gray-900">
               Sua marca com <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">força e presença</span> <br />
               visual de verdade.
             </h1>
             
-            <p className="text-base md:text-lg text-gray-600 max-w-xl leading-relaxed">
+            <h2 className="text-base md:text-lg text-gray-600 max-w-xl leading-relaxed font-normal">
               O segredo das empresas que mais vendem é uma marca que transmite confiança instantânea. Desenvolvemos logotipos de extremo alto padrão que destacam o seu negócio da concorrência e valorizam o seu produto na primeira olhada.
-            </p>
+            </h2>
             
-            <div className="flex items-center gap-8 pt-8">
+            <div className="flex flex-wrap items-center gap-6 md:gap-8 pt-6 md:pt-8">
               <div className="flex flex-col gap-1">
-                <div className="text-3xl font-black text-gray-900">12k+</div>
-                <div className="text-xs text-gray-500 uppercase tracking-widest font-bold">Projetos Feitos</div>
+                <div className="text-2xl md:text-3xl font-black text-gray-900">12k+</div>
+                <div className="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest font-bold">Projetos Feitos</div>
               </div>
-              <div className="w-px h-12 bg-gray-200"></div>
+              <div className="w-px h-10 md:h-12 bg-gray-200"></div>
               <div className="flex flex-col gap-1">
-                <div className="text-3xl font-black text-gray-900">99.4%</div>
-                <div className="text-xs text-gray-500 uppercase tracking-widest font-bold">Satisfação</div>
+                <div className="text-2xl md:text-3xl font-black text-gray-900">99.4%</div>
+                <div className="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest font-bold">Satisfação</div>
               </div>
             </div>
           </div>
@@ -116,29 +116,29 @@ export default async function Home() {
           <p className="text-gray-600 text-lg">Veja o que dizem empreendedores que transformaram a imagem de seus negócios.</p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {[
-            { name: "Carlos Souza", role: "Pizzaria Bella Italia", initials: "CS", color: "bg-red-50 text-red-600", text: "Excelente! Eu queria algo clássico com uma fatia de pizza e o nome bem forte. O resultado veio de primeira e já mandei rodar as caixas da pizzaria com ele." },
-            { name: "Dra. Mariana Costa", role: "Odontologia Integrada", initials: "MC", color: "bg-teal-50 text-teal-600", text: "Me surpreendeu muito. Conseguiu criar um ícone de dente integrado de forma sutil e sofisticada, fugindo completamente daqueles logos genéricos de internet." },
-            { name: "Marcos Lima", role: "Oficina AutoTech", initials: "ML", color: "bg-orange-50 text-orange-600", text: "O logotipo facilitou muito para eu fazer a fachada da oficina. Cores bem escolhidas e o símbolo do carro ficou animal." },
-            { name: "Felipe Nunes", role: "Nunes Advocacia", initials: "FN", color: "bg-yellow-50 text-yellow-600", text: "Procurava uma marca séria, minimalista e imponente. O resultado final com monograma ficou perfeito para o meu escritório de advocacia." },
-            { name: "Juliana Rocha", role: "Studio Glow Estética", initials: "JR", color: "bg-pink-50 text-pink-600", text: "Fiz o logo para o meu salão. As cores e a tipografia ficaram super chiques e elegantes. Recomendo muito!" },
-            { name: "Roberto Silva", role: "Iron Gym", initials: "RS", color: "bg-blue-50 text-blue-600", text: "Robusto e moderno. O símbolo do escudo com as iniciais ficou excelente para estampar as camisetas e a fachada da academia." },
+            { name: "Carlos Souza", role: "Pizzaria Bella Italia", initials: "CS", color: "bg-red-50 text-red-600", text: "Excelente! Eu queria algo clássico com uma fatia de pizza e o nome bem forte. O resultado veio de primeira e já mandei rodar as caixas da pizzaria com ele.", rating: "★★★★★" },
+            { name: "Dra. Mariana Costa", role: "Odontologia Integrada", initials: "MC", color: "bg-teal-50 text-teal-600", text: "Demorou uns segundinhos a mais do que eu esperava pra gerar na tela, mas me surpreendeu muito. Conseguiu criar um ícone de dente integrado de forma sutil e sofisticada. Muito superior aos templates da internet.", rating: "★★★★½" },
+            { name: "Marcos Lima", role: "Oficina AutoTech", initials: "ML", color: "bg-orange-50 text-orange-600", text: "O logotipo facilitou muito para eu fazer a fachada da oficina. Cores bem escolhidas e o símbolo do carro ficou animal.", rating: "★★★★★" },
+            { name: "Felipe Nunes", role: "Nunes Advocacia", initials: "FN", color: "bg-yellow-50 text-yellow-600", text: "Procurava uma marca séria, minimalista e imponente. Queria mais opções de fontes clássicas, mas o resultado final com monograma ficou perfeito para o meu escritório de advocacia.", rating: "★★★★½" },
+            { name: "Juliana Rocha", role: "Studio Glow Estética", initials: "JR", color: "bg-pink-50 text-pink-600", text: "Fiz o logo para o meu salão. As cores e a tipografia ficaram super chiques e elegantes. Recomendo muito!", rating: "★★★★★" },
+            { name: "Roberto Silva", role: "Iron Gym", initials: "RS", color: "bg-blue-50 text-blue-600", text: "Robusto e moderno. O símbolo do escudo com as iniciais ficou excelente para estampar as camisetas e a fachada da academia.", rating: "★★★★★" },
           ].map((t, idx) => (
-            <div key={idx} className="bg-white border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-blue-900/5 p-10 rounded-[2rem] space-y-6 hover:-translate-y-1 transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: `${150 + (idx % 3) * 100}ms` }}>
+            <div key={idx} className="bg-white border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-blue-900/5 p-6 md:p-10 rounded-3xl md:rounded-[2rem] space-y-6 hover:-translate-y-1 transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: `${150 + (idx % 3) * 100}ms` }}>
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-4">
-                  <div className={`w-14 h-14 rounded-full ${t.color} flex items-center justify-center text-lg font-black`}>
+                  <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full ${t.color} flex items-center justify-center text-lg font-black`}>
                     {t.initials}
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg text-gray-900">{t.name}</h4>
-                    <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mt-1">{t.role}</p>
+                    <h4 className="font-bold text-base md:text-lg text-gray-900">{t.name}</h4>
+                    <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-wider font-semibold mt-1">{t.role}</p>
                   </div>
                 </div>
               </div>
-              <p className="text-gray-600 text-base leading-relaxed">"{t.text}"</p>
-              <div className="flex text-yellow-400 text-lg">★★★★★</div>
+              <p className="text-gray-600 text-sm md:text-base leading-relaxed">"{t.text}"</p>
+              <div className="flex text-yellow-400 text-base md:text-lg tracking-widest">{t.rating}</div>
             </div>
           ))}
         </div>
@@ -206,6 +206,25 @@ export default async function Home() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* 5.5. SEO Heavy Content Block */}
+      <section className="bg-gray-50/50 py-32 border-t border-gray-100">
+        <div className="max-w-[1000px] mx-auto px-6 md:px-12 lg:px-24 prose prose-lg prose-blue">
+          <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-6 tracking-tight">
+            Por que um Logotipo Premium é o Motor de Crescimento da sua Empresa?
+          </h2>
+          <p className="text-gray-600 leading-relaxed mb-6">
+            No mercado digital atual, a primeira impressão não é apenas importante — ela é o fator decisivo para a conversão. Estudos de neuromarketing comprovam que o cérebro humano processa imagens 60.000 vezes mais rápido que textos. Ter um logotipo profissional, criado com diretrizes geométricas rígidas, alto contraste e harmonia tipográfica, posiciona seu negócio instantaneamente acima da concorrência.
+          </p>
+          <h3 className="text-2xl font-bold text-gray-900 mb-4 mt-12">Como a identidade visual impacta o seu ticket médio</h3>
+          <p className="text-gray-600 leading-relaxed mb-6">
+            Empresas que investem em um design premium conseguem cobrar mais caro por seus produtos e serviços. O motivo é simples: a percepção de valor. Um design amador transmite insegurança e barateia a oferta. Por outro lado, um design estruturado, com uma paleta de cores correta e proporções matemáticas, aciona gatilhos de autoridade no subconsciente do seu cliente. 
+          </p>
+          <p className="text-gray-600 leading-relaxed mb-6">
+            O <strong>Criador de Logomarca</strong> foi arquitetado exatamente para resolver esse problema de forma imediata. Baseado nos princípios de grandes mestres do design como Paul Rand e Massimo Vignelli, nossa plataforma entrega não apenas uma imagem, mas um sistema visual coeso e de altíssima resolução, pronto para estampar a fachada do seu negócio físico, as embalagens dos seus produtos e todo o seu ecossistema digital nas redes sociais.
+          </p>
         </div>
       </section>
 

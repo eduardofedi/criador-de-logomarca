@@ -36,6 +36,22 @@ export async function POST(req: NextRequest) {
           .from('orders')
           .update({ status: 'paid' })
           .eq('id', orderId);
+
+        // Enviar e-mail para garantir entrega imediata
+        let svgContent = null;
+        if (Array.isArray(order.logos)) {
+          svgContent = order.logos[0]?.svg_content;
+        } else {
+          svgContent = order.logos?.svg_content;
+        }
+
+        if (svgContent) {
+          try {
+            await sendLogoEmail(order.email, svgContent);
+          } catch (e) {
+            console.error('Email error in manual check:', e);
+          }
+        }
       }
 
       return NextResponse.json({ paid: true });
