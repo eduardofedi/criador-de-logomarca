@@ -21,11 +21,11 @@ export default function ProtectedPreview({ html, watermarkText = 'Criador de Log
       {/* Watermark Overlay (Anti-Cópia) */}
       {!isPaid && (
         <div 
-          className="absolute inset-0 pointer-events-none select-none overflow-hidden opacity-10 flex flex-wrap justify-center items-center gap-x-16 gap-y-12 p-8"
-          style={{ transform: 'rotate(-30deg) scale(1.5)' }}
+          className="absolute inset-0 pointer-events-none select-none overflow-hidden opacity-30 flex flex-wrap justify-center items-center gap-x-6 gap-y-6 p-4 mix-blend-difference"
+          style={{ transform: 'rotate(-25deg) scale(2)' }}
         >
-          {Array.from({ length: 48 }).map((_, i) => (
-            <span key={i} className="text-gray-400 font-black text-sm select-none whitespace-nowrap tracking-wider">
+          {Array.from({ length: 64 }).map((_, i) => (
+            <span key={i} className="text-white font-black text-xl select-none whitespace-nowrap tracking-tighter">
               {watermarkText}
             </span>
           ))}
