@@ -40,7 +40,7 @@ export default async function Home() {
       </nav>
 
       {/* 1. First Fold (Hero + Briefing) */}
-      <section id="generator" className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-24 pt-12 pb-24 md:pt-20 md:pb-32 relative">
+      <section id="generator" className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-24 pt-12 pb-24 md:pt-20 md:pb-32 relative animate-in fade-in zoom-in-95 duration-1000 fill-mode-both">
         <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-100 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
 
         <div className="grid xl:grid-cols-12 gap-16 lg:gap-24 items-center">
@@ -81,9 +81,9 @@ export default async function Home() {
       </section>
 
       {/* 2. Como Funciona Section */}
-      <section id="how-it-works" className="bg-gray-50 py-32 border-y border-gray-100">
+      <section id="how-it-works" className="bg-gray-50/50 py-32 border-y border-gray-100">
         <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-24">
-          <div className="text-center max-w-2xl mx-auto mb-20 space-y-4">
+          <div className="text-center max-w-2xl mx-auto mb-20 space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both" style={{ animationDelay: '150ms' }}>
             <span className="text-blue-600 font-bold uppercase tracking-widest text-sm">O Método</span>
             <h2 className="text-4xl md:text-5xl font-black tracking-tight text-gray-900">Como Funciona Nosso Sistema</h2>
             <p className="text-gray-600 text-lg">Em três passos simples, nosso sistema traduz sua visão em um design excepcional.</p>
@@ -95,9 +95,9 @@ export default async function Home() {
               { step: "02", title: "Geração do Design", desc: "Nosso sistema calcula as proporções, escolhe a tipografia de alta presença e desenha o logotipo perfeito para a sua empresa." },
               { step: "03", title: "Receba o Logotipo", desc: "Ao finalizar a compra, você faz o download instantâneo da imagem em alta resolução pronta para uso." }
             ].map((item, idx) => (
-              <div key={idx} className="bg-white p-10 rounded-[2rem] border border-gray-100 relative group hover:border-blue-100 hover:shadow-2xl hover:shadow-blue-900/5 transition-all duration-500">
-                <span className="text-7xl font-black text-blue-50 absolute top-8 right-8 group-hover:text-blue-100 transition-colors duration-500">{item.step}</span>
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-6">
+              <div key={idx} className="bg-white p-10 rounded-[2rem] border border-gray-200 shadow-sm relative group hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-2 transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: `${200 + idx * 100}ms` }}>
+                <span className="text-7xl font-black text-gray-50 absolute top-8 right-8 group-hover:text-blue-50 transition-colors duration-500">{item.step}</span>
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
                   <CheckCircle2 className="w-6 h-6 text-blue-600" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4 text-gray-900 tracking-tight">{item.title}</h3>
@@ -110,7 +110,7 @@ export default async function Home() {
 
       {/* 3. Testimonials Section */}
       <section id="testimonials" className="py-32 max-w-[1600px] mx-auto px-6 md:px-12 lg:px-24">
-        <div className="text-center max-w-2xl mx-auto mb-20 space-y-4">
+        <div className="text-center max-w-2xl mx-auto mb-20 space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both">
           <span className="text-blue-600 font-bold uppercase tracking-widest text-sm">Validação</span>
           <h2 className="text-4xl md:text-5xl font-black tracking-tight text-gray-900">Marcas Reais, Clientes Satisfeitos</h2>
           <p className="text-gray-600 text-lg">Veja o que dizem empreendedores que transformaram a imagem de seus negócios.</p>
@@ -125,7 +125,7 @@ export default async function Home() {
             { name: "Juliana Rocha", role: "Studio Glow Estética", initials: "JR", color: "bg-pink-50 text-pink-600", text: "Fiz o logo para o meu salão. As cores e a tipografia ficaram super chiques e elegantes. Recomendo muito!" },
             { name: "Roberto Silva", role: "Iron Gym", initials: "RS", color: "bg-blue-50 text-blue-600", text: "Robusto e moderno. O símbolo do escudo com as iniciais ficou excelente para estampar as camisetas e a fachada da academia." },
           ].map((t, idx) => (
-            <div key={idx} className="bg-white border border-gray-100 shadow-sm hover:shadow-lg p-10 rounded-[2rem] space-y-6 transition-all duration-300">
+            <div key={idx} className="bg-white border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-blue-900/5 p-10 rounded-[2rem] space-y-6 hover:-translate-y-1 transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: `${150 + (idx % 3) * 100}ms` }}>
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-4">
                   <div className={`w-14 h-14 rounded-full ${t.color} flex items-center justify-center text-lg font-black`}>
@@ -146,9 +146,9 @@ export default async function Home() {
 
       {/* 4. Recent Posts Section */}
       {recentPosts && recentPosts.length > 0 && (
-        <section className="bg-gray-50 py-32 border-t border-gray-100">
+        <section className="bg-gray-50/50 py-32 border-t border-gray-100">
           <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-24">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both">
               <div className="space-y-4">
                 <span className="text-blue-600 font-bold uppercase tracking-widest text-sm">Conteúdo</span>
                 <h2 className="text-4xl md:text-5xl font-black tracking-tight text-gray-900">Artigos Recentes</h2>
@@ -159,9 +159,9 @@ export default async function Home() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {recentPosts.map((post: any) => (
-                <article key={post.slug} className="group flex flex-col justify-between">
-                  <div className="bg-white border border-gray-100 p-10 rounded-[2rem] h-full flex flex-col justify-between hover:shadow-xl hover:shadow-blue-900/5 transition-all duration-300">
+              {recentPosts.map((post: any, idx: number) => (
+                <article key={post.slug} className="group flex flex-col justify-between animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: `${200 + idx * 100}ms` }}>
+                  <div className="bg-white border border-gray-200 p-10 rounded-[2rem] h-full flex flex-col justify-between hover:shadow-2xl hover:shadow-blue-900/10 hover:border-blue-200 hover:-translate-y-2 transition-all duration-500">
                     <div>
                       <h3 className="text-2xl font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors duration-300 mb-4">
                         <Link href={`/blog/${post.slug}`}>{post.title}</Link>
@@ -184,7 +184,7 @@ export default async function Home() {
       {/* 5. FAQ Section */}
       <section id="faq" className="py-32 border-t border-gray-100 bg-white">
         <div className="max-w-[1000px] mx-auto px-6 md:px-12 lg:px-24">
-          <div className="text-center mb-20 space-y-4">
+          <div className="text-center mb-20 space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both">
             <span className="text-blue-600 font-bold uppercase tracking-widest text-sm">Suporte</span>
             <h2 className="text-4xl md:text-5xl font-black tracking-tight text-gray-900 flex items-center justify-center gap-4">
               <HelpCircle className="text-blue-600 w-10 h-10" /> Dúvidas Frequentes
@@ -200,7 +200,7 @@ export default async function Home() {
               { q: "Como funciona o pagamento?", a: "O pagamento é processado de forma 100% segura e instantânea via PIX utilizando a plataforma Asaas. Assim que aprovado, o arquivo é enviado direto para o seu e-mail." },
               { q: "Consigo editar as cores do logotipo depois?", a: "Como entregamos o arquivo em formato vetorial aberto (SVG), você ou qualquer designer pode fazer alterações estruturais, de cor e tipografia facilmente no futuro usando softwares como Illustrator ou Figma." }
             ].map((faq, idx) => (
-              <div key={idx} className="bg-gray-50 border border-gray-100 p-8 rounded-2xl hover:bg-gray-100 transition-colors duration-300">
+              <div key={idx} className="bg-white border border-gray-200 shadow-sm p-8 rounded-2xl hover:border-blue-200 hover:shadow-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: `${100 + idx * 50}ms` }}>
                 <h3 className="text-xl font-bold mb-3 text-gray-900">{faq.q}</h3>
                 <p className="text-gray-600 text-base leading-relaxed">{faq.a}</p>
               </div>
