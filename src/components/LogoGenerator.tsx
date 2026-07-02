@@ -327,7 +327,11 @@ export default function LogoGenerator() {
                       </div>
                       <div>
                         <h4 className="text-2xl font-black text-gray-900 mb-2">Pagamento Confirmado!</h4>
-                        <p className="text-gray-600">Enviamos os arquivos finais de altíssima qualidade (SVG) para o seu e-mail.</p>
+                        <p className="text-gray-600 font-medium">
+                          Seu logo foi enviado também no e-mail <strong>{email}</strong>
+                          <br />
+                          <span className="text-sm text-gray-500">Verifique a caixa de spam se não o encontrar na caixa de entrada.</span>
+                        </p>
                       </div>
                       <button 
                         onClick={downloadPng}
