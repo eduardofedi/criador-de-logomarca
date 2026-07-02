@@ -37,6 +37,29 @@ export default function LogoGenerator() {
   const [isPaid, setIsPaid] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
 
+  // Auto-polling for payment
+  useEffect(() => {
+    if (!pixData?.paymentId || !pixData?.orderId || isPaid) return;
+    
+    const interval = setInterval(() => {
+      // Background check without setting isChecking to avoid UI flicker
+      fetch('/api/check-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentId: pixData.paymentId, orderId: pixData.orderId })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.paid) {
+          setIsPaid(true);
+        }
+      })
+      .catch(() => {}); // silent fail on background polling
+    }, 3000); // Check every 3 seconds
+    
+    return () => clearInterval(interval);
+  }, [pixData, isPaid]);
+
   useEffect(() => {
     if (!loading) return;
     setPhraseIdx(0);
@@ -131,39 +154,19 @@ export default function LogoGenerator() {
     }
   };
 
-  const downloadSvgAsPng = () => {
+  const downloadSvg = () => {
     if (!result?.html) return;
     
-    // Convert SVG to PNG
-    const svgBlob = new Blob([result.html], { type: 'image/svg+xml;charset=utf-8' });
-    const DOMURL = window.URL || window.webkitURL || window;
-    const url = DOMURL.createObjectURL(svgBlob);
+    const blob = new Blob([result.html], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
     
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      // Set high resolution for download (2000x2000)
-      canvas.width = 2000;
-      canvas.height = 2000;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        // Draw white background
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        const pngUrl = canvas.toDataURL('image/png');
-        
-        const downloadLink = document.createElement('a');
-        downloadLink.href = pngUrl;
-        downloadLink.download = 'Logotipo_Premium.png';
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-      }
-      DOMURL.revokeObjectURL(url);
-    };
-    img.src = url;
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url;
+    downloadLink.download = 'Logotipo_Premium_Vetorial.svg';
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    URL.revokeObjectURL(url);
   };
 
   const finalPrice = '5,01';
@@ -323,10 +326,10 @@ export default function LogoGenerator() {
                         <p className="text-gray-600">Enviamos os arquivos finais de altíssima qualidade (SVG) para o seu e-mail.</p>
                       </div>
                       <button 
-                        onClick={downloadSvgAsPng}
+                        onClick={downloadSvg}
                         className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition shadow-lg shadow-green-600/20"
                       >
-                        <Download className="w-5 h-5" /> Baixar Imagem (PNG) Agora
+                        <Download className="w-5 h-5" /> Baixar Arquivo Original (SVG)
                       </button>
                     </div>
                   ) : (
