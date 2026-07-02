@@ -5,12 +5,12 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Criador de Logomarca | Logotipos Profissionais com Inteligência Artificial",
-  description: "Crie o logotipo da sua empresa em segundos com inteligência artificial. Designs exclusivos, de alto impacto visual e prontos para uso comercial. Experimente grátis!",
-  keywords: ["criador de logomarca", "logotipo online", "fazer logo online", "logo inteligência artificial", "design de logo"],
+  title: "Criador de Logomarca | Logotipos Profissionais",
+  description: "Crie o logotipo da sua empresa em segundos. Designs exclusivos, de alto impacto visual e prontos para uso comercial. Experimente grátis!",
+  keywords: ["criador de logomarca", "logotipo online", "fazer logo online", "design de logo"],
   openGraph: {
-    title: "Criador de Logomarca | AI Premium Logo Design",
-    description: "Crie o logotipo da sua empresa em segundos com inteligência artificial de alto padrão.",
+    title: "Criador de Logomarca | Premium Logo Design",
+    description: "Crie o logotipo da sua empresa em segundos com design de alto padrão.",
     type: "website",
     locale: "pt_BR",
     url: "https://criadordelogomarca.com.br",
