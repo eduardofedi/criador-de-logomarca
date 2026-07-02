@@ -119,9 +119,9 @@ export default async function Home() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {[
             { name: "Carlos Souza", role: "Pizzaria Bella Italia", initials: "CS", color: "bg-red-50 text-red-600", text: "Excelente! Eu queria algo clássico com uma fatia de pizza e o nome bem forte. O resultado veio de primeira e já mandei rodar as caixas da pizzaria com ele.", rating: "★★★★★" },
-            { name: "Dra. Mariana Costa", role: "Odontologia Integrada", initials: "MC", color: "bg-teal-50 text-teal-600", text: "Demorou uns segundinhos a mais do que eu esperava pra gerar na tela, mas me surpreendeu muito. Conseguiu criar um ícone de dente integrado de forma sutil e sofisticada. Muito superior aos templates da internet.", rating: "★★★★½" },
+            { name: "Dra. Mariana Costa", role: "Odontologia Integrada", initials: "MC", color: "bg-teal-50 text-teal-600", text: "Demorou uns segundinhos a mais do que eu esperava pra gerar na tela, mas me surpreendeu muito. Conseguiu criar um ícone de dente integrado de forma sutil e sofisticada. Muito superior aos templates da internet.", rating: "★★★★☆" },
             { name: "Marcos Lima", role: "Oficina AutoTech", initials: "ML", color: "bg-orange-50 text-orange-600", text: "O logotipo facilitou muito para eu fazer a fachada da oficina. Cores bem escolhidas e o símbolo do carro ficou animal.", rating: "★★★★★" },
-            { name: "Felipe Nunes", role: "Nunes Advocacia", initials: "FN", color: "bg-yellow-50 text-yellow-600", text: "Procurava uma marca séria, minimalista e imponente. Queria mais opções de fontes clássicas, mas o resultado final com monograma ficou perfeito para o meu escritório de advocacia.", rating: "★★★★½" },
+            { name: "Felipe Nunes", role: "Nunes Advocacia", initials: "FN", color: "bg-yellow-50 text-yellow-600", text: "Procurava uma marca séria, minimalista e imponente. Queria mais opções de fontes clássicas, mas o resultado final com monograma ficou perfeito para o meu escritório de advocacia.", rating: "★★★★☆" },
             { name: "Juliana Rocha", role: "Studio Glow Estética", initials: "JR", color: "bg-pink-50 text-pink-600", text: "Fiz o logo para o meu salão. As cores e a tipografia ficaram super chiques e elegantes. Recomendo muito!", rating: "★★★★★" },
             { name: "Roberto Silva", role: "Iron Gym", initials: "RS", color: "bg-blue-50 text-blue-600", text: "Robusto e moderno. O símbolo do escudo com as iniciais ficou excelente para estampar as camisetas e a fachada da academia.", rating: "★★★★★" },
           ].map((t, idx) => (
@@ -209,22 +209,50 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 5.5. SEO Heavy Content Block */}
-      <section className="bg-gray-50/50 py-32 border-t border-gray-100">
-        <div className="max-w-[1000px] mx-auto px-6 md:px-12 lg:px-24 prose prose-lg prose-blue">
-          <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-6 tracking-tight">
-            Por que um Logotipo Premium é o Motor de Crescimento da sua Empresa?
-          </h2>
-          <p className="text-gray-600 leading-relaxed mb-6">
-            No mercado digital atual, a primeira impressão não é apenas importante — ela é o fator decisivo para a conversão. Estudos de neuromarketing comprovam que o cérebro humano processa imagens 60.000 vezes mais rápido que textos. Ter um logotipo profissional, criado com diretrizes geométricas rígidas, alto contraste e harmonia tipográfica, posiciona seu negócio instantaneamente acima da concorrência.
-          </p>
-          <h3 className="text-2xl font-bold text-gray-900 mb-4 mt-12">Como a identidade visual impacta o seu ticket médio</h3>
-          <p className="text-gray-600 leading-relaxed mb-6">
-            Empresas que investem em um design premium conseguem cobrar mais caro por seus produtos e serviços. O motivo é simples: a percepção de valor. Um design amador transmite insegurança e barateia a oferta. Por outro lado, um design estruturado, com uma paleta de cores correta e proporções matemáticas, aciona gatilhos de autoridade no subconsciente do seu cliente. 
-          </p>
-          <p className="text-gray-600 leading-relaxed mb-6">
-            O <strong>Criador de Logomarca</strong> foi arquitetado exatamente para resolver esse problema de forma imediata. Baseado nos princípios de grandes mestres do design como Paul Rand e Massimo Vignelli, nossa plataforma entrega não apenas uma imagem, mas um sistema visual coeso e de altíssima resolução, pronto para estampar a fachada do seu negócio físico, as embalagens dos seus produtos e todo o seu ecossistema digital nas redes sociais.
-          </p>
+      {/* 5.5. SEO Heavy Content Block - Redesigned Premium */}
+      <section className="bg-gray-50/50 py-32 border-t border-gray-100 overflow-hidden">
+        <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-24">
+          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both">
+            <span className="text-blue-600 font-bold uppercase tracking-widest text-sm">Design com Propósito</span>
+            <h2 className="text-4xl md:text-5xl font-black tracking-tight text-gray-900">
+              Por que um Logotipo Premium é o Motor de Crescimento da sua Empresa?
+            </h2>
+            <p className="text-gray-600 text-lg leading-relaxed">
+              No mercado digital atual, a primeira impressão não é apenas importante — ela é o fator decisivo para a conversão. Veja como a identidade visual certa muda o jogo.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            <div className="bg-white p-10 rounded-[2rem] border border-gray-200 shadow-sm hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-2 transition-all duration-500 group animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: '100ms' }}>
+              <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mb-8 group-hover:bg-blue-600 transition-colors duration-500">
+                <svg className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Processamento Imediato</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Estudos de neuromarketing comprovam que o cérebro humano processa imagens 60.000 vezes mais rápido que textos. Ter um logotipo profissional, criado com diretrizes geométricas rígidas, posiciona seu negócio instantaneamente acima da concorrência.
+              </p>
+            </div>
+
+            <div className="bg-white p-10 rounded-[2rem] border border-gray-200 shadow-sm hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-2 transition-all duration-500 group animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: '200ms' }}>
+              <div className="w-14 h-14 rounded-2xl bg-cyan-50 border border-cyan-100 flex items-center justify-center mb-8 group-hover:bg-cyan-500 transition-colors duration-500">
+                <svg className="w-6 h-6 text-cyan-600 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Aumento de Ticket Médio</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Empresas que investem em um design premium conseguem cobrar mais caro por seus serviços. Um design amador transmite insegurança. Já um design com harmonia aciona gatilhos de autoridade no subconsciente do seu cliente.
+              </p>
+            </div>
+
+            <div className="bg-white p-10 rounded-[2rem] border border-gray-200 shadow-sm hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-2 transition-all duration-500 group animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: '300ms' }}>
+              <div className="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center mb-8 group-hover:bg-indigo-600 transition-colors duration-500">
+                <svg className="w-6 h-6 text-indigo-600 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Autoridade Absoluta</h3>
+              <p className="text-gray-600 leading-relaxed">
+                O <strong>Criador de Logomarca</strong> foi arquitetado para entregar não apenas uma imagem, mas um sistema visual coeso e de altíssima resolução, pronto para estampar sua fachada física e todo o ecossistema digital da sua marca.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
