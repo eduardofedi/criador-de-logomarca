@@ -44,9 +44,22 @@ export async function POST(req: NextRequest) {
         .eq('id', orderId);
 
       // Enviar e-mail
-      const svgContent = order.logos?.svg_content;
+      let svgContent = null;
+      if (Array.isArray(order.logos)) {
+        svgContent = order.logos[0]?.svg_content;
+      } else {
+        svgContent = order.logos?.svg_content;
+      }
+
       if (svgContent) {
-        await sendLogoEmail(order.email, svgContent);
+        try {
+          await sendLogoEmail(order.email, svgContent);
+          console.log('Email enviado com sucesso para', order.email);
+        } catch (emailErr) {
+          console.error('Erro ao enviar email:', emailErr);
+        }
+      } else {
+        console.error('Logo SVG nao encontrado no pedido', orderId);
       }
     }
 
