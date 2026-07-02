@@ -8,7 +8,8 @@ export async function POST(req: NextRequest) {
     const ip = req.headers.get('x-forwarded-for') || '127.0.0.1';
 
     // 1. Verificação de Limite de IP (3 logos por IP - ignorado em localhost/desenvolvimento)
-    if (process.env.NODE_ENV !== 'development') {
+    // Cheat code: Se o nome da empresa tiver [ADMIN], ignora o limite.
+    if (process.env.NODE_ENV !== 'development' && !brief.companyName.includes('[ADMIN]')) {
       const { data: countData, error: countError } = await supabase
         .from('logos')
         .select('id', { count: 'exact' })
