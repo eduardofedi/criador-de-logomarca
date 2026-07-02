@@ -108,16 +108,17 @@ export default function LogoGenerator() {
   };
 
   const checkPayment = async () => {
-    if (!pixData?.orderId) return;
+    if (!pixData?.paymentId || !pixData?.orderId) return;
     setIsChecking(true);
     try {
-      const { data, error } = await supabase
-        .from('orders')
-        .select('status')
-        .eq('id', pixData.orderId)
-        .single();
+      const res = await fetch('/api/check-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentId: pixData.paymentId, orderId: pixData.orderId })
+      });
+      const data = await res.json();
         
-      if (data?.status === 'paid') {
+      if (data.paid) {
         setIsPaid(true);
         alert("Pagamento Confirmado! O logotipo já foi enviado para o seu e-mail e agora você pode baixá-lo sem marca d'água aqui mesmo.");
       } else {
@@ -165,7 +166,7 @@ export default function LogoGenerator() {
     img.src = url;
   };
 
-  const finalPrice = '29,90';
+  const finalPrice = '1,00';
 
   return (
     <div className="w-full">
