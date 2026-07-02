@@ -15,17 +15,29 @@ export default async function BlogPost({ params }: any) {
   const htmlContent = parseMarkdown(post.content);
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white p-6 md:p-12">
-      <article className="max-w-3xl mx-auto bg-gray-950 p-8 md:p-12 rounded-3xl border border-gray-900 shadow-2xl">
-        <Link href="/blog" className="text-blue-500 hover:text-blue-400 font-semibold transition mb-8 inline-block">
-          ← Todos os artigos
+    <main className="min-h-screen bg-gray-50 text-gray-900 font-sans">
+      <nav className="bg-white border-b border-gray-100 px-6 py-6 text-center">
+        <Link href="/" className="inline-flex items-center gap-2 text-xl font-black text-gray-900 hover:text-blue-600 transition-colors">
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-black text-white text-sm">
+            C
+          </div>
+          Criador de Logomarca
         </Link>
-        <h1 className="text-4xl md:text-5xl font-black mb-8 leading-tight text-white">{post.title}</h1>
-        <div 
-          className="prose prose-invert max-w-none text-gray-300 leading-relaxed text-lg"
-          dangerouslySetInnerHTML={{ __html: htmlContent }}
-        />
-      </article>
+      </nav>
+
+      <div className="max-w-[800px] mx-auto px-6 md:px-12 py-12 md:py-20 animate-in fade-in slide-in-from-bottom-8 duration-700">
+        <Link href="/blog" className="inline-flex items-center text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors mb-10">
+          ← Voltar para o Blog
+        </Link>
+        
+        <article className="bg-white p-8 md:p-16 rounded-[2.5rem] border border-gray-200 shadow-xl shadow-blue-900/5">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-12 leading-[1.1] text-gray-900 tracking-tight">{post.title}</h1>
+          <div 
+            className="prose prose-lg md:prose-xl prose-blue max-w-none text-gray-600 leading-relaxed prose-headings:text-gray-900 prose-headings:font-bold prose-a:text-blue-600 prose-strong:text-gray-900 prose-strong:font-bold"
+            dangerouslySetInnerHTML={{ __html: htmlContent }}
+          />
+        </article>
+      </div>
     </main>
   );
 }
