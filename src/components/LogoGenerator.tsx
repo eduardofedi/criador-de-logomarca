@@ -154,19 +154,23 @@ export default function LogoGenerator() {
     }
   };
 
-  const downloadSvg = () => {
+  const downloadPng = () => {
     if (!result?.html) return;
     
-    const blob = new Blob([result.html], { type: 'image/svg+xml;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    
-    const downloadLink = document.createElement('a');
-    downloadLink.href = url;
-    downloadLink.download = 'Logotipo_Premium_Vetorial.svg';
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-    URL.revokeObjectURL(url);
+    // O result.html contém: <img src="data:image/png;base64,..." alt="Logo" class="..." />
+    // Extraímos a base64 com regex para forçar o download direto
+    const srcMatch = result.html.match(/src="(data:image\/png;base64,[^"]+)"/);
+    if (srcMatch && srcMatch[1]) {
+      const dataUrl = srcMatch[1];
+      const downloadLink = document.createElement('a');
+      downloadLink.href = dataUrl;
+      downloadLink.download = 'Logotipo_Premium.png';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    } else {
+      alert("Erro ao extrair imagem PNG. Tente usar o botão direito e 'Salvar Imagem'.");
+    }
   };
 
   const finalPrice = '5,01';
@@ -326,10 +330,10 @@ export default function LogoGenerator() {
                         <p className="text-gray-600">Enviamos os arquivos finais de altíssima qualidade (SVG) para o seu e-mail.</p>
                       </div>
                       <button 
-                        onClick={downloadSvg}
+                        onClick={downloadPng}
                         className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition shadow-lg shadow-green-600/20"
                       >
-                        <Download className="w-5 h-5" /> Baixar Arquivo Original (SVG)
+                        <Download className="w-5 h-5" /> Baixar Imagem (PNG) Agora
                       </button>
                     </div>
                   ) : (
