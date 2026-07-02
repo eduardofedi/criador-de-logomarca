@@ -1,0 +1,32 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing/Utility scripts with credentials
+test-models.js
+test-openai-image.js
+seed-blog.js
+
+# Next.js and build outputs
+/.next/
+/dist/
+/out/
+/build
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Local environment files (CRITICAL: NEVER COMMIT THESE)
+.env*.local
+.env
+
+# Vercel
+.vercel
+
+# OS files
+.DS_Store
+*.pem
