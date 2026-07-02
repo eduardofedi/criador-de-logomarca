@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import ProtectedPreview from './ProtectedPreview';
-import { Loader2, Palette, ArrowRight, ShieldCheck, Zap, X, QrCode, Mail, Copy, CheckCircle2 } from 'lucide-react';
+import { Loader2, Palette, ArrowRight, ShieldCheck, Zap, X, QrCode, Mail, Copy, CheckCircle2, Download } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 const loadingPhrases = [
   "Analisando o nome da sua empresa e segmento...",
@@ -28,9 +29,13 @@ export default function LogoGenerator() {
   // Checkout state
   const [email, setEmail] = useState('');
   const [cpfCnpj, setCpfCnpj] = useState('');
-  const [pixData, setPixData] = useState<{ encodedImage: string, payload: string, paymentId: string } | null>(null);
+  const [pixData, setPixData] = useState<{ encodedImage: string, payload: string, paymentId: string, orderId: string } | null>(null);
   const [isGeneratingPix, setIsGeneratingPix] = useState(false);
   const [copied, setCopied] = useState(false);
+  
+  // Payment verification state
+  const [isPaid, setIsPaid] = useState(false);
+  const [isChecking, setIsChecking] = useState(false);
 
   useEffect(() => {
     if (!loading) return;
@@ -100,6 +105,64 @@ export default function LogoGenerator() {
       setCopied(true);
       setTimeout(() => setCopied(false), 3000);
     }
+  };
+
+  const checkPayment = async () => {
+    if (!pixData?.orderId) return;
+    setIsChecking(true);
+    try {
+      const { data, error } = await supabase
+        .from('orders')
+        .select('status')
+        .eq('id', pixData.orderId)
+        .single();
+        
+      if (data?.status === 'paid') {
+        setIsPaid(true);
+        alert('Pagamento Confirmado! O logotipo já foi enviado para o seu e-mail e agora você pode baixá-lo sem marca d\\'água aqui mesmo.');
+      } else {
+        alert('O pagamento ainda não consta como confirmado. Se você acabou de pagar, aguarde alguns instantes e clique novamente.');
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
+  const downloadSvgAsPng = () => {
+    if (!result?.html) return;
+    
+    // Convert SVG to PNG
+    const svgBlob = new Blob([result.html], { type: 'image/svg+xml;charset=utf-8' });
+    const DOMURL = window.URL || window.webkitURL || window;
+    const url = DOMURL.createObjectURL(svgBlob);
+    
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      // Set high resolution for download (2000x2000)
+      canvas.width = 2000;
+      canvas.height = 2000;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        // Draw white background
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const pngUrl = canvas.toDataURL('image/png');
+        
+        const downloadLink = document.createElement('a');
+        downloadLink.href = pngUrl;
+        downloadLink.download = 'Logotipo_Premium.png';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      }
+      DOMURL.revokeObjectURL(url);
+    };
+    img.src = url;
   };
 
   const finalPrice = '29,90';
@@ -186,7 +249,7 @@ export default function LogoGenerator() {
             
             {/* Left: Large, Beautiful Preview */}
             <div className="w-full max-w-sm mx-auto">
-              <ProtectedPreview html={result.html} />
+              <ProtectedPreview html={result.html} isPaid={isPaid} />
             </div>
             
             {/* Right: Checkout & Details */}
@@ -249,37 +312,66 @@ export default function LogoGenerator() {
                 </div>
               ) : (
                 <div className="space-y-6 pt-4 animate-in fade-in zoom-in duration-300">
-                  <div className="bg-white border border-gray-100 p-4 rounded-3xl shadow-sm mx-auto w-fit">
-                    <img 
-                      src={`data:image/jpeg;base64,${pixData.encodedImage}`} 
-                      alt="QR Code PIX" 
-                      className="w-48 h-48 object-contain"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <p className="text-sm text-gray-900 font-bold text-center">Pix Copia e Cola:</p>
-                    <div className="flex gap-2">
-                      <input 
-                        type="text" 
-                        readOnly 
-                        value={pixData.payload}
-                        className="flex-1 bg-gray-50 border border-gray-200 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-gray-600 font-medium outline-none"
-                      />
+                  {isPaid ? (
+                    <div className="space-y-6 text-center">
+                      <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto shadow-inner">
+                        <CheckCircle2 className="w-10 h-10 text-green-600" />
+                      </div>
+                      <div>
+                        <h4 className="text-2xl font-black text-gray-900 mb-2">Pagamento Confirmado!</h4>
+                        <p className="text-gray-600">Enviamos os arquivos finais de altíssima qualidade (SVG) para o seu e-mail.</p>
+                      </div>
                       <button 
-                        onClick={copyToClipboard}
-                        className="bg-blue-600 hover:bg-blue-700 p-3 rounded-xl text-white transition flex items-center justify-center shadow-lg shadow-blue-600/20"
+                        onClick={downloadSvgAsPng}
+                        className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition shadow-lg shadow-green-600/20"
                       >
-                        {copied ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                        <Download className="w-5 h-5" /> Baixar Imagem (PNG) Agora
                       </button>
                     </div>
-                  </div>
+                  ) : (
+                    <>
+                      <div className="bg-white border border-gray-100 p-4 rounded-3xl shadow-sm mx-auto w-fit relative">
+                        <img 
+                          src={`data:image/jpeg;base64,${pixData.encodedImage}`} 
+                          alt="QR Code PIX" 
+                          className="w-48 h-48 object-contain"
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <p className="text-sm text-gray-900 font-bold text-center">Pix Copia e Cola:</p>
+                        <div className="flex gap-2">
+                          <input 
+                            type="text" 
+                            readOnly 
+                            value={pixData.payload}
+                            className="flex-1 bg-gray-50 border border-gray-200 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-gray-600 font-medium outline-none"
+                          />
+                          <button 
+                            onClick={copyToClipboard}
+                            className="bg-blue-600 hover:bg-blue-700 p-3 rounded-xl text-white transition flex items-center justify-center shadow-lg shadow-blue-600/20"
+                          >
+                            {copied ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                          </button>
+                        </div>
+                      </div>
 
-                  <div className="bg-blue-50 border border-blue-100 p-5 rounded-xl text-center">
-                    <p className="text-sm text-blue-800 font-medium">
-                      Assim que o pagamento for confirmado, seu logotipo em alta definição será enviado imediatamente para: <br/><strong className="text-blue-900">{email}</strong>
-                    </p>
-                  </div>
+                      <button 
+                        onClick={checkPayment}
+                        disabled={isChecking}
+                        className="w-full bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 disabled:bg-gray-50 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition"
+                      >
+                        {isChecking ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />} 
+                        Já paguei, confirmar pagamento
+                      </button>
+
+                      <div className="bg-blue-50 border border-blue-100 p-5 rounded-xl text-center">
+                        <p className="text-sm text-blue-800 font-medium">
+                          Assim que o pagamento for confirmado, seu logotipo em alta definição será enviado imediatamente para: <br/><strong className="text-blue-900">{email}</strong>
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
 
