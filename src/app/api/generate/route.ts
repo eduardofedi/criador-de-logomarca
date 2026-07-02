@@ -8,15 +8,26 @@ export async function POST(req: NextRequest) {
     const ip = req.headers.get('x-forwarded-for') || '127.0.0.1';
 
     // 1. Verificação de Limite de IP (3 logos por IP - ignorado em localhost/desenvolvimento)
-    // Cheat code: Se o nome da empresa tiver [ADMIN], ignora o limite.
-    if (process.env.NODE_ENV !== 'development' && !brief.companyName.includes('[ADMIN]')) {
-      const { data: countData, error: countError } = await supabase
-        .from('logos')
-        .select('id', { count: 'exact' })
-        .eq('ip_address', ip);
+    // Lista de IPs liberados (Admin)
+    const adminIPs = [
+      '2804:14d:1897:80f4:7007:89cf:724f:20b3', 
+      '179.232.216.5'
+    ];
+    
+    const isAdmin = adminIPs.includes(ip);
 
-      if (countData && countData.length >= 3) {
-        return NextResponse.json({ error: 'Limite de 3 gerações por IP atingido.' }, { status: 429 });
+    // 1. Rate Limiting (Bloqueio por IP, ignorando admin)
+    if (!isAdmin) {
+      const { data: usage } = await supabase
+        .from('logos')
+        .select('id')
+        .eq('ip_address', ip)
+        .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+
+      if (usage && usage.length >= 3) {
+        return NextResponse.json({ 
+          error: 'Limite diário atingido. Tente novamente amanhã.' 
+        }, { status: 429 });
       }
     }
 

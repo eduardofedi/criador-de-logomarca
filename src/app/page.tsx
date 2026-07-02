@@ -57,7 +57,7 @@ export default async function Home() {
             </h1>
             
             <p className="text-base md:text-lg text-gray-600 max-w-xl leading-relaxed">
-              Garanta a melhor primeira impressão para a sua empresa. Criamos logotipos profissionais e de alto impacto que destacam o seu negócio, atraem mais clientes e valorizam os seus serviços de forma instantânea.
+              O segredo das empresas que mais vendem é uma marca que transmite confiança instantânea. Desenvolvemos logotipos de extremo alto padrão que destacam o seu negócio da concorrência e valorizam o seu produto na primeira olhada.
             </p>
             
             <div className="flex items-center gap-8 pt-8">
@@ -95,8 +95,8 @@ export default async function Home() {
               { step: "02", title: "Geração do Design", desc: "Nosso sistema calcula as proporções, escolhe a tipografia de alta presença e desenha o logotipo perfeito para a sua empresa." },
               { step: "03", title: "Receba o Logotipo", desc: "Ao finalizar a compra, você faz o download instantâneo da imagem em alta resolução pronta para uso." }
             ].map((item, idx) => (
-              <div key={idx} className="bg-white p-10 rounded-[2rem] border border-gray-200 shadow-sm relative group hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-2 transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: `${200 + idx * 100}ms` }}>
-                <span className="text-7xl font-black text-gray-50 absolute top-8 right-8 group-hover:text-blue-50 transition-colors duration-500">{item.step}</span>
+              <div key={idx} className="bg-white p-10 rounded-[2rem] border border-gray-200 shadow-sm relative group hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-900/20 hover:-translate-y-3 hover:scale-[1.02] transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: `${200 + idx * 100}ms` }}>
+                <span className="text-7xl font-black text-gray-50 absolute top-8 right-8 group-hover:text-blue-100 group-hover:rotate-12 transition-all duration-500">{item.step}</span>
                 <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
                   <CheckCircle2 className="w-6 h-6 text-blue-600" />
                 </div>
@@ -193,12 +193,12 @@ export default async function Home() {
           
           <div className="space-y-4">
             {[
-              { q: "Vou receber o logotipo em qual formato?", a: "Você receberá o logotipo em formato vetorial de altíssima resolução (SVG), que garante qualidade infinita sem pixelar, ideal para impressões gigantes ou uso digital, além de permitir conversões para qualquer outro formato que precisar." },
-              { q: "Posso registrar a marca gerada?", a: "Sim. Ao comprar o logotipo, todos os direitos comerciais e de propriedade intelectual são transferidos para você, permitindo o registro no INPI." },
+              { q: "Vou receber o logotipo em qual formato?", a: "Você receberá o logotipo em formato de imagem em altíssima resolução (PNG Premium - 2000x2000px). Este é o formato universal, perfeito para ser aplicado em redes sociais, sites, cartões de visita, fachadas e todo o seu material de marketing instantaneamente." },
+              { q: "Posso registrar a marca gerada?", a: "Absolutamente! Ao comprar o logotipo, todos os direitos comerciais, patrimoniais e de propriedade intelectual são transferidos 100% para você. Você é o dono legal e exclusivo da marca, podendo registrá-la no INPI sem restrições." },
               { q: "Por quanto tempo o logo fica disponível para download?", a: "Os dados ficam armazenados nos nossos servidores por apenas 24 horas após a geração por questões de privacidade e otimização. Baixe seus arquivos assim que concluir a compra!" },
               { q: "E se eu não gostar do resultado?", a: "Você pode gerar até 3 variações gratuitas para testar diferentes descrições e estilos antes de decidir pela compra." },
               { q: "Como funciona o pagamento?", a: "O pagamento é processado de forma 100% segura e instantânea via PIX utilizando a plataforma Asaas. Assim que aprovado, o arquivo é enviado direto para o seu e-mail." },
-              { q: "Consigo editar as cores do logotipo depois?", a: "Como entregamos o arquivo em formato vetorial aberto (SVG), você ou qualquer designer pode fazer alterações estruturais, de cor e tipografia facilmente no futuro usando softwares como Illustrator ou Figma." }
+              { q: "Consigo aplicar o logotipo sobre fotos ou fundos escuros?", a: "Sim! Como entregamos o logotipo com contraste bem definido e altíssima resolução, é super fácil para você ou sua gráfica utilizarem ferramentas simples (como Canva ou Photoshop) para remover o fundo branco e aplicá-lo perfeitamente como marca d'água em qualquer lugar." }
             ].map((faq, idx) => (
               <div key={idx} className="bg-white border border-gray-200 shadow-sm p-8 rounded-2xl hover:border-blue-200 hover:shadow-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: `${100 + idx * 50}ms` }}>
                 <h3 className="text-xl font-bold mb-3 text-gray-900">{faq.q}</h3>
@@ -220,7 +220,7 @@ export default async function Home() {
               Criador de Logomarca
             </div>
             <p className="text-sm text-gray-400 leading-relaxed max-w-sm">
-              Sistema de design gráfico focado em marcas geométricas de alto padrão para empresas visionárias.
+              Criador de Logomarca é a plataforma definitiva para empresas que buscam elevar o padrão visual. Crie sua identidade premium, impulsione suas vendas e conquiste o respeito do mercado em minutos.
             </p>
           </div>
           <div>

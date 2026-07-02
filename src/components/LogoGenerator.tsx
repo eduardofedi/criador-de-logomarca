@@ -6,12 +6,11 @@ import { Loader2, Palette, ArrowRight, ShieldCheck, Zap, X, QrCode, Mail, Copy, 
 import { supabase } from '@/lib/supabase';
 
 const loadingPhrases = [
-  "Analisando o nome da sua empresa e segmento...",
-  "Definindo a paleta de cores ideal para a sua marca...",
-  "Estruturando a tipografia com máxima legibilidade...",
-  "Desenhando os elementos e ícones do logotipo...",
-  "Ajustando as proporções e geometria do design...",
-  "Finalizando o arquivo de alta resolução..."
+  "Tomando um café para acordar os neurônios criativos...",
+  "Analisando seu segmento para não criar mais um logo genérico...",
+  "Calculando a proporção áurea (sim, a gente liga pra isso)...",
+  "Ajustando o contraste para sua marca brilhar até no escuro...",
+  "Quase lá! Passando um pano para entregar o logo brilhando...",
 ];
 
 export default function LogoGenerator() {
@@ -173,7 +172,7 @@ export default function LogoGenerator() {
     }
   };
 
-  const finalPrice = '5,01';
+  const finalPrice = '29,90';
 
   return (
     <div className="w-full">

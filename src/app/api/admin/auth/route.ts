@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
 
   // Buscar senha atual no banco
   const { data: config } = await supabase.from('settings').select('*').eq('key', 'admin_config').single();
-  const savedPassword = config?.value?.password || 'admin';
+  const savedPassword = config?.value?.password || 'Cr1ad0r@Logo#26';
 
   if (mode === 'login') {
     if (currentPassword === savedPassword) {
