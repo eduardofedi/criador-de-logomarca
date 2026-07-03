@@ -257,6 +257,11 @@ export default function LogoGenerator() {
             {/* Left: Large, Beautiful Preview */}
             <div className="w-full max-w-sm mx-auto">
               <ProtectedPreview html={result.html} isPaid={isPaid} />
+              {!isPaid && (
+                <p className="text-center text-xs font-semibold text-gray-500 mt-4 px-4 bg-gray-50 py-3 rounded-xl border border-gray-100 shadow-sm animate-pulse">
+                  <span className="text-orange-500 font-bold">Aviso:</span> Conclua o pagamento para remover a marca d'água e baixar em altíssima definição (PNG 2000px).
+                </p>
+              )}
             </div>
             
             {/* Right: Checkout & Details */}
