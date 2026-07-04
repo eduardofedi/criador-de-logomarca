@@ -6,11 +6,12 @@ import { Loader2, Palette, ArrowRight, ShieldCheck, Zap, X, QrCode, Mail, Copy, 
 import { supabase } from '@/lib/supabase';
 
 const loadingPhrases = [
-  "Tomando um café para acordar os neurônios criativos...",
-  "Analisando seu segmento para não criar mais um logo genérico...",
-  "Calculando a proporção áurea (sim, a gente liga pra isso)...",
-  "Ajustando o contraste para sua marca brilhar até no escuro...",
-  "Quase lá! Passando um pano para entregar o logo brilhando...",
+  "Você sabia que a cor azul transmite confiança? Sorte a sua!",
+  "Procurando a fonte perfeita que não seja Comic Sans...",
+  "Chamando o espírito criativo dos mestres do design...",
+  "Sabia que o logo da Nike custou apenas 35 dólares em 1971?",
+  "Ajeitando os pixels para que fiquem alinhadinhos...",
+  "Preparando a arte final para você brilhar no mercado..."
 ];
 
 export default function LogoGenerator() {

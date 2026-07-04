@@ -5,12 +5,12 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Criador de Logomarca | Logotipos Profissionais",
-  description: "Crie o logotipo da sua empresa em segundos. Designs exclusivos, de alto impacto visual e prontos para uso comercial. Experimente grátis!",
-  keywords: ["criador de logomarca", "logotipo online", "fazer logo online", "design de logo"],
+  title: "Criador de Logomarca | Faça Seu Logotipo Profissional Online",
+  description: "Crie a logomarca perfeita para sua empresa. Gerador de logotipo profissional focado em branding de alto padrão, conversão e exclusividade. Teste agora!",
+  keywords: ["criador de logomarca", "logotipo online", "fazer logo", "criar logomarca gratis", "gerador de logotipo", "identidade visual empresa"],
   openGraph: {
-    title: "Criador de Logomarca | Premium Logo Design",
-    description: "Crie o logotipo da sua empresa em segundos com design de alto padrão.",
+    title: "Criador de Logomarca | Faça Seu Logotipo Profissional Online",
+    description: "Crie a logomarca perfeita para sua empresa. Design de alto padrão, pronto para impressão e redes sociais.",
     type: "website",
     locale: "pt_BR",
     url: "https://criadordelogomarca.com.br",
