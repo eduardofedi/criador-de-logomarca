@@ -50,13 +50,13 @@ export default async function Home() {
               Design Premium
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[1.05] text-gray-900">
-              Engenharia visual para marcas de <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">impacto instantâneo.</span>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.05] text-gray-900">
+              Sua empresa com <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">cara de negócio grande.</span>
             </h1>
             
             <h2 className="text-base md:text-lg text-gray-600 max-w-xl leading-relaxed font-normal">
-              Nós dominamos a inteligência artificial para que você não precise tentar a sorte com prompts. O resultado? Logotipos estruturados com rigor técnico, peso visual e extremo alto padrão, prontos para o mercado.
+              Passe mais confiança e atraia mais clientes com um logotipo profissional. Você digita o nome do seu negócio e nosso sistema cria uma marca linda, exclusiva e pronta para usar no WhatsApp, Instagram e na sua fachada.
             </h2>
             
             <div className="flex flex-wrap items-center gap-6 md:gap-8 pt-6 md:pt-8">
@@ -90,9 +90,9 @@ export default async function Home() {
           
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { step: "01", title: "O Contexto", desc: "Você nos conta o básico: o nome da empresa e o mercado. Não precisa inventar descrições complexas, nossa arquitetura entende o que funciona para o seu nicho." },
-              { step: "02", title: "Engenharia Visual", desc: "Nossos motores de IA não 'chutam' imagens. Eles aplicam parâmetros rigorosos de direção de arte, proporção, contraste e tipografia para criar algo duradouro." },
-              { step: "03", title: "Pronto para o Mundo", desc: "Diferente de geradores que entregam arquivos inúteis, você baixa a arte final (PNG 2000px) pronta para estampar fachadas, redes sociais e uniformes." }
+              { step: "01", title: "Fale sobre seu negócio", desc: "Você só precisa digitar o nome da sua empresa e o que você faz (ex: mecânica, doceria, salão). É simples e rápido, sem complicação." },
+              { step: "02", title: "Criação Automática", desc: "Nosso sistema inteligente faz todo o trabalho duro. Ele combina as melhores cores, letras e desenhos perfeitos para o seu negócio." },
+              { step: "03", title: "Pronto para usar", desc: "Você baixa a imagem do seu logotipo em altíssima qualidade, prontinha para você colocar na placa da loja, no WhatsApp e no seu uniforme." }
             ].map((item, idx) => (
               <div key={idx} className="bg-white p-10 rounded-[2rem] border border-gray-200 shadow-sm relative group hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-900/20 hover:-translate-y-3 hover:scale-[1.02] transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: `${200 + idx * 100}ms` }}>
                 <span className="text-7xl font-black text-gray-50 absolute top-8 right-8 group-hover:text-blue-100 group-hover:rotate-12 transition-all duration-500">{item.step}</span>
@@ -112,9 +112,9 @@ export default async function Home() {
         <div className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-24">
           <div className="flex flex-col lg:flex-row gap-16 items-center">
             <div className="w-full lg:w-1/2 space-y-6">
-              <span className="text-blue-600 font-bold uppercase tracking-widest text-sm">O Elefante na Sala</span>
+              <span className="text-blue-600 font-bold uppercase tracking-widest text-sm">Sem Dor de Cabeça</span>
               <h2 className="text-3xl md:text-5xl font-black tracking-tight text-gray-900 leading-[1.1]">
-                "Por que não usar uma inteligência artificial genérica?"
+                "Por que não tentar fazer sozinho em outros sites?"
               </h2>
               <div className="w-20 h-1.5 bg-blue-600 rounded-full"></div>
             </div>
@@ -123,9 +123,9 @@ export default async function Home() {
               <div className="flex gap-4 items-start">
                 <div className="w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center font-bold flex-shrink-0 mt-1">✕</div>
                 <div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-2">IAs Genéricas entregam caos</h4>
+                  <h4 className="text-xl font-bold text-gray-900 mb-2">Outros sites entregam problemas</h4>
                   <p className="text-gray-600 leading-relaxed">
-                    Se você pedir um logo para uma IA comum, ela vai te entregar ilustrações complexas, textos com erros de ortografia, gradientes impossíveis de imprimir e mockups 3D inúteis. Elas desenham bonito, mas não entendem de <strong>regras de design corporativo</strong>.
+                    Se você tentar criar em robôs gratuitos pela internet, eles vão te entregar desenhos cheios de detalhes, com textos escritos errados ou com cores que ficam horríveis na hora de imprimir. É só dor de cabeça.
                   </p>
                 </div>
               </div>
@@ -133,9 +133,9 @@ export default async function Home() {
               <div className="flex gap-4 items-start">
                 <div className="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center font-bold flex-shrink-0 mt-1">✓</div>
                 <div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-2">Nós entregamos Engenharia Visual</h4>
+                  <h4 className="text-xl font-bold text-gray-900 mb-2">Nós entregamos a marca pronta</h4>
                   <p className="text-gray-600 leading-relaxed">
-                    Nossa plataforma age como um "tradutor técnico". Nós pegamos a sua ideia simples e a reescrevemos sob o capô utilizando <strong>diretrizes de mestres do design</strong> (como Paul Rand e Paula Scher). O resultado sai com tipografia legível, contraste alto e pronto para uso comercial.
+                    Nosso sistema foi criado para você, que é dono do seu negócio e não tem tempo a perder. A ferramenta já sabe o tamanho certo e entrega a imagem perfeita, pronta para usar, sem você precisar entender de tecnologia.
                   </p>
                 </div>
               </div>
