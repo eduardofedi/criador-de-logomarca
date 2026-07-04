@@ -108,37 +108,35 @@ export default async function Home() {
       </section>
 
       {/* 2.5. Objection Handling: Por que nós? */}
-      <section className="py-24 bg-white border-y border-gray-100">
+      <section className="py-24 md:py-32 bg-gray-50/50 border-y border-gray-100 overflow-hidden">
         <div className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-24">
-          <div className="flex flex-col lg:flex-row gap-16 items-center">
-            <div className="w-full lg:w-1/2 space-y-6">
-              <span className="text-blue-600 font-bold uppercase tracking-widest text-sm">Sem Dor de Cabeça</span>
-              <h2 className="text-3xl md:text-5xl font-black tracking-tight text-gray-900 leading-[1.1]">
-                "Por que não tentar fazer sozinho em outros sites?"
-              </h2>
-              <div className="w-20 h-1.5 bg-blue-600 rounded-full"></div>
+          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <span className="text-blue-600 font-bold uppercase tracking-widest text-sm">A Verdade Sobre Ferramentas Gratuitas</span>
+            <h2 className="text-3xl md:text-5xl font-black tracking-tight text-gray-900 leading-[1.1]">
+              "Por que não tentar fazer sozinho em outros sites?"
+            </h2>
+            <p className="text-gray-600 text-lg">Muitos tentam economizar usando robôs genéricos na internet e acabam perdendo tempo e paciência.</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Bad Card */}
+            <div className="bg-white p-10 md:p-12 rounded-[2rem] border border-red-100 shadow-sm hover:shadow-2xl hover:shadow-red-900/10 hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: '100ms' }}>
+              <div className="absolute top-0 right-0 w-48 h-48 bg-red-50 rounded-full blur-3xl -z-10 group-hover:bg-red-100 transition-colors duration-500"></div>
+              <div className="w-16 h-16 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center font-black text-2xl mb-8 group-hover:scale-110 transition-transform duration-500">✕</div>
+              <h4 className="text-2xl font-black text-gray-900 mb-4">Outros sites entregam dor de cabeça</h4>
+              <p className="text-gray-600 text-lg leading-relaxed">
+                Os robôs gratuitos te entregam desenhos cheios de detalhes inúteis, textos escritos com "letras estranhas" e cores que ficam horríveis na hora de imprimir. Você não consegue usar no mundo real sem ter que pagar alguém para consertar o arquivo.
+              </p>
             </div>
             
-            <div className="w-full lg:w-1/2 space-y-8">
-              <div className="flex gap-4 items-start">
-                <div className="w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center font-bold flex-shrink-0 mt-1">✕</div>
-                <div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-2">Outros sites entregam problemas</h4>
-                  <p className="text-gray-600 leading-relaxed">
-                    Se você tentar criar em robôs gratuitos pela internet, eles vão te entregar desenhos cheios de detalhes, com textos escritos errados ou com cores que ficam horríveis na hora de imprimir. É só dor de cabeça.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex gap-4 items-start">
-                <div className="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center font-bold flex-shrink-0 mt-1">✓</div>
-                <div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-2">Nós entregamos a marca pronta</h4>
-                  <p className="text-gray-600 leading-relaxed">
-                    Nosso sistema foi criado para você, que é dono do seu negócio e não tem tempo a perder. A ferramenta já sabe o tamanho certo e entrega a imagem perfeita, pronta para usar, sem você precisar entender de tecnologia.
-                  </p>
-                </div>
-              </div>
+            {/* Good Card */}
+            <div className="bg-white p-10 md:p-12 rounded-[2rem] border border-green-100 shadow-sm hover:shadow-2xl hover:shadow-green-900/10 hover:-translate-y-2 transition-all duration-500 group relative overflow-hidden animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: '200ms' }}>
+              <div className="absolute top-0 right-0 w-48 h-48 bg-green-50 rounded-full blur-3xl -z-10 group-hover:bg-green-100 transition-colors duration-500"></div>
+              <div className="w-16 h-16 rounded-2xl bg-green-50 text-green-600 flex items-center justify-center font-black text-2xl mb-8 group-hover:scale-110 transition-transform duration-500">✓</div>
+              <h4 className="text-2xl font-black text-gray-900 mb-4">Nós entregamos a marca pronta</h4>
+              <p className="text-gray-600 text-lg leading-relaxed">
+                Nosso sistema foi criado para o dono de negócio. A ferramenta acerta o texto perfeitamente, usa contrastes corretos e entrega a imagem (PNG) já no formato ideal, pronta para usar na sua placa, cartão ou WhatsApp na mesma hora.
+              </p>
             </div>
           </div>
         </div>
@@ -154,12 +152,12 @@ export default async function Home() {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {[
-            { name: "Carlos Souza", role: "Pizzaria Bella Italia", initials: "CS", color: "bg-red-50 text-red-600", text: "Excelente! Eu queria algo clássico com uma fatia de pizza e o nome bem forte. O resultado veio de primeira e já mandei rodar as caixas da pizzaria com ele.", rating: "★★★★★" },
-            { name: "Dra. Mariana Costa", role: "Odontologia Integrada", initials: "MC", color: "bg-teal-50 text-teal-600", text: "Demorou uns segundinhos a mais do que eu esperava pra gerar na tela, mas me surpreendeu muito. Conseguiu criar um ícone de dente integrado de forma sutil e sofisticada. Muito superior aos templates da internet.", rating: "★★★★☆" },
-            { name: "Marcos Lima", role: "Oficina AutoTech", initials: "ML", color: "bg-orange-50 text-orange-600", text: "O logotipo facilitou muito para eu fazer a fachada da oficina. Cores bem escolhidas e o símbolo do carro ficou animal.", rating: "★★★★★" },
-            { name: "Felipe Nunes", role: "Nunes Advocacia", initials: "FN", color: "bg-yellow-50 text-yellow-600", text: "Procurava uma marca séria, minimalista e imponente. Queria mais opções de fontes clássicas, mas o resultado final com monograma ficou perfeito para o meu escritório de advocacia.", rating: "★★★★☆" },
-            { name: "Juliana Rocha", role: "Studio Glow Estética", initials: "JR", color: "bg-pink-50 text-pink-600", text: "Fiz o logo para o meu salão. As cores e a tipografia ficaram super chiques e elegantes. Recomendo muito!", rating: "★★★★★" },
-            { name: "Roberto Silva", role: "Iron Gym", initials: "RS", color: "bg-blue-50 text-blue-600", text: "Robusto e moderno. O símbolo do escudo com as iniciais ficou excelente para estampar as camisetas e a fachada da academia.", rating: "★★★★★" },
+            { name: "Carlos Souza", role: "Pizzaria Bella Italia", initials: "CS", color: "bg-red-50 text-red-600", text: "Tentei fazer sozinho em geradores gringos e as letras saíram todas tortas. Aqui saiu certinho o nome da pizzaria e o desenho ficou show. Já mandei pra gráfica!", rating: "★★★★★" },
+            { name: "Dra. Mariana Costa", role: "Odontologia Integrada", initials: "MC", color: "bg-teal-50 text-teal-600", text: "Me poupou um dinheirão! Fui numa agência e me cobraram um absurdo. Em minutos eu fiz o logo do meu consultório aqui e ficou maravilhoso e profissional.", rating: "★★★★☆" },
+            { name: "Marcos Lima", role: "Oficina AutoTech", initials: "ML", color: "bg-orange-50 text-orange-600", text: "O logotipo facilitou muito para eu fazer a fachada da oficina. Baixei na hora e mandei pro cara do adesivo. Rápido e prático pra quem tem comércio.", rating: "★★★★★" },
+            { name: "Felipe Nunes", role: "Nunes Advocacia", initials: "FN", color: "bg-yellow-50 text-yellow-600", text: "Tentei fazer no Canva, mas ficava com cara de amador, igual a todo mundo. Queria algo mais sério pro meu escritório e o monograma aqui gerou algo único.", rating: "★★★★☆" },
+            { name: "Juliana Rocha", role: "Studio Glow Estética", initials: "JR", color: "bg-pink-50 text-pink-600", text: "Fiz o logo para o meu salão de beleza. As cores ficaram super chiques. O arquivo PNG tem ótima qualidade, já estou usando no perfil do Instagram.", rating: "★★★★★" },
+            { name: "Roberto Silva", role: "Iron Gym", initials: "RS", color: "bg-blue-50 text-blue-600", text: "Robusto e forte. Antes eu usava uma imagem que achei no Google e tava feio. Agora o escudo com as minhas iniciais ficou excelente para estampar nas camisetas.", rating: "★★★★★" },
           ].map((t, idx) => (
             <div key={idx} className="bg-white border border-gray-200 shadow-sm hover:shadow-xl hover:shadow-blue-900/5 p-6 md:p-10 rounded-3xl md:rounded-[2rem] space-y-6 hover:-translate-y-1 transition-all duration-500 animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: `${150 + (idx % 3) * 100}ms` }}>
               <div className="flex justify-between items-start">
@@ -229,12 +227,11 @@ export default async function Home() {
           
           <div className="space-y-4">
             {[
-              { q: "Vou receber o logotipo em qual formato?", a: "Você receberá o logotipo em formato de imagem em altíssima resolução (PNG Premium - 2000x2000px). Este é o formato universal, perfeito para ser aplicado em redes sociais, sites, cartões de visita, fachadas e todo o seu material de marketing instantaneamente." },
-              { q: "Posso registrar a marca gerada?", a: "Absolutamente! Ao comprar o logotipo, todos os direitos comerciais, patrimoniais e de propriedade intelectual são transferidos 100% para você. Você é o dono legal e exclusivo da marca, podendo registrá-la no INPI sem restrições." },
-              { q: "Por quanto tempo o logo fica disponível para download?", a: "Os dados ficam armazenados nos nossos servidores por apenas 24 horas após a geração por questões de privacidade e otimização. Baixe seus arquivos assim que concluir a compra!" },
-              { q: "E se eu não gostar do resultado?", a: "Você pode gerar até 3 variações gratuitas para testar diferentes descrições e estilos antes de decidir pela compra." },
-              { q: "Como funciona o pagamento?", a: "O pagamento é processado de forma 100% segura e instantânea via PIX utilizando a plataforma Asaas. Assim que aprovado, o arquivo é enviado direto para o seu e-mail." },
-              { q: "Consigo aplicar o logotipo sobre fotos ou fundos escuros?", a: "Sim! Como entregamos o logotipo com contraste bem definido e altíssima resolução, é super fácil para você ou sua gráfica utilizarem ferramentas simples (como Canva ou Photoshop) para remover o fundo branco e aplicá-lo perfeitamente como marca d'água em qualquer lugar." }
+              { q: "Vou receber o logotipo em qual formato?", a: "Você receberá o logotipo em formato de imagem de altíssima qualidade (PNG Premium - 2000x2000px). É perfeito para você colocar no Instagram, WhatsApp, mandar para a gráfica fazer panfletos ou colocar na fachada do seu comércio." },
+              { q: "Por que não tentar fazer de graça em geradores de IA comuns?", a: "Se você pedir para robôs genéricos na internet, eles entregam imagens com 'letras tortas', cheias de borrões e que não servem para imprimir. Nosso sistema foi criado para corrigir isso e entregar o seu nome certinho, com qualidade de agência profissional." },
+              { q: "Posso registrar a marca gerada?", a: "Sim! Ao comprar o logotipo, ele é totalmente seu. Você é o dono exclusivo da marca e pode usá-la em todos os seus materiais sem nenhuma restrição." },
+              { q: "E se eu não gostar da primeira opção?", a: "Fique tranquilo! Você pode gerar até 3 opções totalmente gratuitas no nosso sistema. Assim você pode testar estilos diferentes até encontrar a que tem a cara do seu negócio." },
+              { q: "Como funciona o pagamento?", a: "O pagamento é 100% seguro via PIX. Assim que você paga, na mesma hora a imagem original sem a marca d'água é liberada na tela para você baixar no celular ou computador, e também enviamos uma cópia para o seu e-mail." }
             ].map((faq, idx) => (
               <div key={idx} className="bg-white border border-gray-200 shadow-sm p-8 rounded-2xl hover:border-blue-200 hover:shadow-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-8 fill-mode-both" style={{ animationDelay: `${100 + idx * 50}ms` }}>
                 <h3 className="text-xl font-bold mb-3 text-gray-900">{faq.q}</h3>
@@ -249,12 +246,12 @@ export default async function Home() {
       <section className="bg-gray-50/50 py-32 border-t border-gray-100 overflow-hidden">
         <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-24">
           <div className="text-center max-w-3xl mx-auto mb-20 space-y-4 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both">
-            <span className="text-blue-600 font-bold uppercase tracking-widest text-sm">Design com Propósito</span>
+            <span className="text-blue-600 font-bold uppercase tracking-widest text-sm">Pequenos Negócios</span>
             <h2 className="text-4xl md:text-5xl font-black tracking-tight text-gray-900">
-              Por que um Logotipo Premium é o Motor de Crescimento da sua Empresa?
+              Por que uma marca bem feita é o segredo para o seu comércio vender mais?
             </h2>
             <p className="text-gray-600 text-lg leading-relaxed">
-              No mercado digital atual, a primeira impressão não é apenas importante — ela é o fator decisivo para a conversão. Veja como a identidade visual certa muda o jogo.
+              No mercado competitivo de hoje, não basta apenas ter um bom serviço. A primeira coisa que o cliente repara é a aparência da sua empresa.
             </p>
           </div>
 
@@ -263,9 +260,9 @@ export default async function Home() {
               <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mb-8 group-hover:bg-blue-600 transition-colors duration-500">
                 <svg className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Processamento Imediato</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Chega de "Letra de Robô"</h3>
               <p className="text-gray-600 leading-relaxed">
-                Estudos de neuromarketing comprovam que o cérebro humano processa imagens 60.000 vezes mais rápido que textos. Ter um logotipo profissional, criado com diretrizes geométricas rígidas, posiciona seu negócio instantaneamente acima da concorrência.
+                Tentar economizar usando robôs soltos na internet sempre resulta em imagens tortas que o cara da gráfica não consegue imprimir. Nossa plataforma é calibrada para entregar o seu texto de forma nítida, criando um logotipo que você tem orgulho de usar.
               </p>
             </div>
 
@@ -273,9 +270,9 @@ export default async function Home() {
               <div className="w-14 h-14 rounded-2xl bg-cyan-50 border border-cyan-100 flex items-center justify-center mb-8 group-hover:bg-cyan-500 transition-colors duration-500">
                 <svg className="w-6 h-6 text-cyan-600 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Aumento de Ticket Médio</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Aumenta o Valor Cobrado</h3>
               <p className="text-gray-600 leading-relaxed">
-                Empresas que investem em um design premium conseguem cobrar mais caro por seus serviços. Um design amador transmite insegurança. Já um design com harmonia aciona gatilhos de autoridade no subconsciente do seu cliente.
+                Empresas com fachadas e panfletos bonitos conseguem cobrar mais pelos seus produtos. Um visual feio passa insegurança para o cliente. Quando você usa uma marca bem construída, as pessoas sentem que sua empresa é confiável e levam o seu negócio a sério.
               </p>
             </div>
 
@@ -283,9 +280,9 @@ export default async function Home() {
               <div className="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center mb-8 group-hover:bg-indigo-600 transition-colors duration-500">
                 <svg className="w-6 h-6 text-indigo-600 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Autoridade Absoluta</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Feito para Pequenos Negócios</h3>
               <p className="text-gray-600 leading-relaxed">
-                O <strong>Criador de Logomarca</strong> foi arquitetado para entregar não apenas uma imagem, mas um sistema visual coeso e de altíssima resolução, pronto para estampar sua fachada física e todo o ecossistema digital da sua marca.
+                O <strong>Criador de Logomarca</strong> entende a sua correria. Não é preciso baixar programas pesados ou ter conhecimento em computador. Em minutos, você resolve a identidade visual da sua lanchonete, oficina ou loja com um custo acessível que cabe no bolso do MEI.
               </p>
             </div>
           </div>
