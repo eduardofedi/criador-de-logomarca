@@ -50,10 +50,9 @@ export default async function Home() {
               Design Premium
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.05] text-gray-900">
-              Engenharia visual para <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">marcas de impacto</span> <br />
-              instantâneo.
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[1.05] text-gray-900">
+              Engenharia visual para marcas de <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">impacto instantâneo.</span>
             </h1>
             
             <h2 className="text-base md:text-lg text-gray-600 max-w-xl leading-relaxed font-normal">
@@ -115,7 +114,7 @@ export default async function Home() {
             <div className="w-full lg:w-1/2 space-y-6">
               <span className="text-blue-600 font-bold uppercase tracking-widest text-sm">O Elefante na Sala</span>
               <h2 className="text-3xl md:text-5xl font-black tracking-tight text-gray-900 leading-[1.1]">
-                "Por que não usar o ChatGPT ou Midjourney sozinho?"
+                "Por que não usar uma inteligência artificial genérica?"
               </h2>
               <div className="w-20 h-1.5 bg-blue-600 rounded-full"></div>
             </div>
